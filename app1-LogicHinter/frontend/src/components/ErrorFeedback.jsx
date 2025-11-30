@@ -318,7 +318,7 @@ const ErrorFeedback = ({ message, onDismiss, isVisible }) => {
                         }}
                       />
                       
-                      <span className="relative z-10">Banish This Warning</span>
+                      <span className="relative z-10">Understood</span>
                     </motion.button>
 
                     {/* Floating Embers/Particles around the box */}
