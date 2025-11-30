@@ -272,24 +272,27 @@ class GeminiClient:
 - Progress shown as a winding path through darkness
 - Completion triggers a mystical celebration effect
 
-#### 3. StepNode.jsx
+#### 3. StepNode.jsx (Tombstone/Crystal Ball)
 
-**Purpose:** Display individual flowchart step
+**Purpose:** Display individual flowchart step with haunting style
 
 **Props:**
 - `step`: object
 - `onChoiceSelect`: function
 - `isActive`: boolean
 
-**Behavior:**
-- Animated entry/exit with Framer Motion
-- Displays step description
-- Renders three choice buttons
-- Shows step number/progress
+**Spooky Design Elements:**
+- Styled as a tombstone, crystal ball, or ancient scroll
+- Glowing runes or mystical symbols
+- Ethereal entrance animation (fade from mist)
+- Pulsing glow around active step
+- Creepy typography for step description
+- Floating animation (gentle hover effect)
+- Shadow effects and depth
 
-#### 4. ChoiceButton.jsx
+#### 4. ChoiceButton.jsx (Potion Bottles/Coffins)
 
-**Purpose:** Interactive choice option button
+**Purpose:** Spooky interactive choice buttons
 
 **Props:**
 - `choice`: object
@@ -297,26 +300,142 @@ class GeminiClient:
 - `isSelected`: boolean
 - `isDisabled`: boolean
 
-**Behavior:**
-- Hover animations
-- Click feedback
-- Visual states (default, selected, disabled)
-- Smooth transitions
+**Spooky Design Elements:**
+- Styled as potion bottles, coffins, or spell books
+- Different colored glows for each option (purple, green, red)
+- Hover effect: intensified glow, slight levitation
+- Click effect: magical sparkles or dark energy burst
+- Selected state: bright pulsing glow
+- Wrong choice: cracking/shattering animation
+- Correct choice: triumphant glow effect
+- Eerie shadows and 3D depth
 
-#### 5. ErrorFeedback.jsx
+#### 5. ErrorFeedback.jsx (Ghostly Warning)
 
-**Purpose:** Display error messages for wrong choices
+**Purpose:** Display haunting error messages for wrong choices
 
 **Props:**
 - `message`: string
 - `onDismiss`: function
 - `isVisible`: boolean
 
-**Behavior:**
-- Animated modal/toast
-- Auto-dismiss option
-- Retry button
-- Slide/fade animations
+**Spooky Design Elements:**
+- Appears as a ghost, phantom, or dark spirit
+- Emerges from shadows with eerie animation
+- Red/orange glowing text (like fire or warning)
+- Floating/hovering effect
+- Wispy smoke or fog trails
+- Dismiss button styled as "banish" or "understood"
+- Screen darkens/blurs behind the error
+- Creepy sound effect (optional)
+- Shaking or trembling animation
+
+#### 6. SpookyBackground.jsx
+
+**Purpose:** Atmospheric background effects
+
+**Props:** None
+
+**Spooky Design Elements:**
+- Animated fog/mist layers moving across screen
+- Floating particles (fireflies, embers, spirits)
+- Subtle cobweb overlays in corners
+- Vignette effect (darker edges)
+- Parallax scrolling for depth
+- Occasional lightning flashes (subtle)
+- Starry night sky or haunted forest backdrop
+
+#### 7. LoadingSpinner.jsx (Mystical Loading)
+
+**Purpose:** Haunting loading animation
+
+**Props:**
+- `message`: string (optional)
+
+**Spooky Design Elements:**
+- Spinning skull, cauldron, or mystical rune circle
+- Glowing particles orbiting the spinner
+- Pulsing glow effect
+- "Summoning your guidance..." or similar spooky text
+- Fog swirling around the spinner
+- Ethereal color transitions
+
+#### 8. SuccessAnimation.jsx
+
+**Purpose:** Celebration when correct choice is made
+
+**Props:**
+- `isVisible`: boolean
+
+**Spooky Design Elements:**
+- Mystical sparkles or magical energy burst
+- Brief screen flash (green/gold glow)
+- Floating runes or symbols
+- Triumphant but still thematic (not too cheerful)
+- Quick animation (1-2 seconds)
+
+## Spooky Design System
+
+### Color Palette
+
+**Primary Colors:**
+- Background: Deep blacks (#0a0a0a, #1a1a1a)
+- Accent Dark: Dark purple (#2d1b4e, #4a2c6d)
+- Accent Bright: Neon purple (#a855f7, #c084fc)
+- Success: Eerie green (#10b981, #34d399)
+- Error: Blood red (#ef4444, #f87171)
+- Warning: Ghostly orange (#f59e0b, #fbbf24)
+
+**Glow Effects:**
+- Purple glow: 0 0 20px rgba(168, 85, 247, 0.5)
+- Green glow: 0 0 20px rgba(16, 185, 129, 0.5)
+- Red glow: 0 0 20px rgba(239, 68, 68, 0.5)
+
+### Typography
+
+**Fonts:**
+- Headers: "Creepster", "Nosifer", or "Eater" (Google Fonts)
+- Body: "Roboto Mono" or "Space Mono" (readable but atmospheric)
+- Accent: "Special Elite" for handwritten/ancient text feel
+
+**Text Effects:**
+- Text shadows for depth
+- Subtle glow on important text
+- Letter spacing for dramatic effect
+
+### Animation Principles
+
+**Timing:**
+- Slow, eerie movements (0.5-1s transitions)
+- Floating effects (2-4s infinite loops)
+- Quick, sharp reactions to user input (0.2s)
+
+**Effects:**
+- Fade in from darkness
+- Slide from shadows
+- Glow intensification
+- Particle dispersal
+- Shake/tremble for errors
+- Smooth levitation
+
+### Interactive Feedback
+
+**Hover States:**
+- Glow intensifies
+- Slight scale increase (1.05x)
+- Shadow deepens
+- Cursor changes to mystical pointer
+
+**Click States:**
+- Brief flash
+- Particle burst
+- Scale pulse
+- Sound effect (optional)
+
+**Focus States:**
+- Pulsing glow border
+- Increased brightness
+- Accessibility-compliant contrast
 
 ### API Service (frontend/src/services/api.js)
 

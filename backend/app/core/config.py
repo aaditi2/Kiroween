@@ -1,5 +1,6 @@
 import os
-from pydantic import BaseSettings, Field
+from pydantic_settings import BaseSettings
+from pydantic import Field
 
 
 class Settings(BaseSettings):
@@ -18,6 +19,7 @@ class Settings(BaseSettings):
     class Config:
         # Looks for .env in backend/ by default
         env_file = os.environ.get("ENV_FILE", ".env")
+        extra = "ignore"  # Ignore extra fields from .env file
 
 
 settings = Settings()
