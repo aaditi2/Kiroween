@@ -2,7 +2,9 @@
 
 ## Overview
 
-LogicHinter is a full-stack web application consisting of a Python backend API and a React frontend. The backend uses the Gemini AI API to generate interactive problem-solving flowcharts, while the frontend provides an engaging, animated user experience using Framer Motion.
+LogicHinter is a full-stack web application consisting of a Python backend API and a React frontend. The backend serves as a **skeleton code template** (Skeleton Crew category) - a lean, flexible foundation that can be adapted for various AI-guided learning applications. The frontend features a **haunting, spooky UI** (Costume Contest category) that transforms learning into an immersive experience. 
+
+**Core Philosophy:** LogicHinter is a coding brainstorm buddy that helps students *think*, not copy. Instead of jumping to YouTube tutorials or direct solutions, students engage with an interactive flowchart that guides their problem-solving process step by step.
 
 ## Architecture
 
@@ -35,10 +37,10 @@ graph TB
 **Frontend:**
 - React 18+
 - Vite (build tool)
-- Framer Motion (animations)
+- Framer Motion (animations for spooky effects)
 - Axios or Fetch API (HTTP client)
-- React Router (if multi-page)
-- Tailwind CSS or styled-components (styling)
+- Tailwind CSS (for rapid spooky styling)
+- Custom CSS for haunting visual effects (fog, shadows, glows)
 
 ## Project Structure
 
@@ -61,32 +63,36 @@ backend/
 └── .gitignore            # Git ignore file
 ```
 
-### Frontend Structure
+### Frontend Structure (Spooky Theme)
 
 ```
 frontend/
 ├── public/
-│   └── vite.svg
+│   ├── fonts/                    # Spooky fonts (Creepster, Nosifer, etc.)
+│   └── sounds/                   # Optional: ambient sounds, error sounds
 ├── src/
-│   ├── main.jsx          # Application entry point
-│   ├── App.jsx           # Root component
+│   ├── main.jsx                  # Application entry point
+│   ├── App.jsx                   # Root component with dark theme
 │   ├── components/
-│   │   ├── ProblemInput.jsx       # Problem submission form
-│   │   ├── FlowchartView.jsx     # Main flowchart display
-│   │   ├── StepNode.jsx           # Individual step component
-│   │   ├── ChoiceButton.jsx      # Choice option button
-│   │   ├── ErrorFeedback.jsx     # Error message display
-│   │   └── LoadingSpinner.jsx    # Loading indicator
+│   │   ├── ProblemInput.jsx      # Haunted text input with glowing effects
+│   │   ├── FlowchartView.jsx    # Graveyard-themed flowchart display
+│   │   ├── StepNode.jsx          # Tombstone/ghost-styled step nodes
+│   │   ├── ChoiceButton.jsx     # Spooky interactive buttons (coffins/potions)
+│   │   ├── ErrorFeedback.jsx    # Ghostly error messages with animations
+│   │   ├── LoadingSpinner.jsx   # Haunting loading animation (spinning skull/cauldron)
+│   │   ├── SpookyBackground.jsx # Animated fog, floating particles, cobwebs
+│   │   └── SuccessAnimation.jsx # Celebration effect when correct choice
 │   ├── hooks/
-│   │   └── useFlowchart.js       # Custom hook for flowchart state
+│   │   └── useFlowchart.js      # Custom hook for flowchart state
 │   ├── services/
-│   │   └── api.js                # API client for backend communication
+│   │   └── api.js               # API client for backend communication
 │   ├── utils/
-│   │   └── animations.js         # Framer Motion animation variants
+│   │   └── animations.js        # Spooky Framer Motion variants
 │   ├── styles/
-│   │   └── index.css             # Global styles
+│   │   ├── index.css            # Global dark theme styles
+│   │   └── spooky.css           # Custom spooky effects (glows, shadows, fog)
 │   └── types/
-│       └── flowchart.js          # Type definitions/PropTypes
+│       └── flowchart.js         # Type definitions/PropTypes
 ├── index.html
 ├── vite.config.js
 ├── package.json
@@ -225,9 +231,9 @@ class GeminiClient:
 
 ### Frontend Components
 
-#### 1. ProblemInput.jsx
+#### 1. ProblemInput.jsx (Haunted Input)
 
-**Purpose:** Problem submission interface
+**Purpose:** Spooky problem submission interface
 
 **Props:** None (uses callback to parent)
 
@@ -235,15 +241,17 @@ class GeminiClient:
 - `problemText`: string
 - `isSubmitting`: boolean
 
-**Behavior:**
-- Textarea for problem input
-- Submit button with loading state
-- Character count display
-- Clear button
+**Spooky Design Elements:**
+- Dark textarea with glowing purple/green border on focus
+- Floating placeholder text with eerie animation
+- Submit button styled as a mystical tome or cauldron
+- Ghostly character count that fades in/out
+- Fog effect around the input area
+- Pulsing glow effect when typing
 
-#### 2. FlowchartView.jsx
+#### 2. FlowchartView.jsx (Graveyard Journey)
 
-**Purpose:** Main container for flowchart display
+**Purpose:** Main container for spooky flowchart display
 
 **Props:**
 - `flowchartData`: object
@@ -255,11 +263,14 @@ class GeminiClient:
 - `showError`: boolean
 - `errorMessage`: string
 
-**Behavior:**
-- Renders current step
-- Manages step progression
-- Handles choice selection
-- Displays error feedback
+**Spooky Design Elements:**
+- Graveyard/haunted forest background theme
+- Path of tombstones representing completed steps
+- Fog rolling across the screen
+- Floating ghost particles in background
+- Eerie ambient glow effects
+- Progress shown as a winding path through darkness
+- Completion triggers a mystical celebration effect
 
 #### 3. StepNode.jsx
 
