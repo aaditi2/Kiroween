@@ -72,7 +72,7 @@ function App() {
               <span className="text-xl">🧠</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-green-400 bg-clip-text">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-green-400 ">
                 LogicHinter
               </h1>
               <p className="text-xs text-gray-500">AI that helps you learn how to code, not copy</p>
@@ -199,19 +199,19 @@ function App() {
 
 
       {/* Fixed Input Bar at Bottom */}
-<footer className="relative z-20 flex-shrink-0 py-6">
+<footer className="relative z-20 flex-shrink-0 py-3">
   <div className="w-full flex justify-center">
-    <form onSubmit={handleSubmit} className="w-2/3 max-w-2xl px-4">  
+    <form onSubmit={handleSubmit} className="w-3/4 max-w-3xl px-4">  
       <div
           className="
-            flex items-center gap-3
+            flex items-center gap-3 p-2
             rounded-xl
             shadow-[0_0_20px_rgba(128,0,255,0.25)]
             transition
             hover:shadow-[0_0_25px_rgba(128,0,255,0.45)]
             hover:bg-purple-600/10
             bg-transparent text-gray-200 placeholder-gray-500
-            text-sm
+            text-base
             border-none outline-none ring-0
             focus:ring-0 focus:outline-none
           "
@@ -228,7 +228,7 @@ function App() {
           disabled={isLoading}
           className="
                 flex-1 bg-transparent text-gray-200 placeholder-gray-500
-                text-sm
+                text-l px-2 py-2
                 border-none outline-none ring-0
                 focus:ring-0 focus:outline-none
 
@@ -241,26 +241,34 @@ function App() {
       <button
         type="button"
         className="
-          h-2 w-2 flex items-center justify-center
-          rounded-md bg-purple-600/20 text-purple-300 text-sm
-          hover:bg-purple-600/30 hover:text-purple-100
-          shadow-[0_0_10px_rgba(128,0,255,0.4)]
+          inline-flex h-9 w-9 items-center justify-center
+          rounded-lg bg-purple-600/80 text-gray-100
+          shadow-lg shadow-purple-500/20
           transition
+          hover:bg-purple-600
+          focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-black
+          disabled:cursor-not-allowed disabled:opacity-60
         "
+        aria-label="Voice input"
       >
-        ၊၊||၊
+        <span className="text-sm">🎤︎︎</span>
       </button>
 
       {/* Send */}
       <button
         type="submit"
+        disabled={isLoading || !inputValue.trim()}
         className="
-          h-2 w-2 flex items-center justify-center
-          rounded-md bg-purple-600/20 text-purple-300 text-sm
-          hover:bg-purple-600/30 hover:text-purple-100
-          shadow-[0_0_10px_rgba(128,0,255,0.4)]
+          inline-flex h-10 w-10 items-center justify-center
+          rounded-xl bg-purple-600/80 text-gray-100
+          shadow-lg shadow-purple-500/20
           transition
+          hover:bg-purple-600
+          focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:ring-offset-2 focus:ring-offset-black
+          disabled:cursor-not-allowed disabled:opacity-60
+          font-size: 40em;
         "
+        aria-label="Send question"
       >
         ↳
       </button>

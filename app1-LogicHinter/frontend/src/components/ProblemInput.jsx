@@ -2,7 +2,6 @@ import '../styles/spooky.css';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-
 const ProblemInput = ({ onSubmit, isLoading }) => {
   const [problemText, setProblemText] = useState('');
   const [isFocused, setIsFocused] = useState(false);
@@ -13,7 +12,7 @@ const ProblemInput = ({ onSubmit, isLoading }) => {
   const charCount = problemText.length;
   const charPercentage = (charCount / maxLength) * 100;
 
-  // Typing detection - show pulsing glow when user is actively typing
+  // Detect typing
   useEffect(() => {
     if (problemText.length > 0) {
       setIsTyping(true);
@@ -24,7 +23,7 @@ const ProblemInput = ({ onSubmit, isLoading }) => {
     }
   }, [problemText]);
 
-  // Show character count when focused or near limit
+  // Show char count
   useEffect(() => {
     if (isFocused || charPercentage > 70) {
       setShowCharCount(true);
@@ -40,9 +39,7 @@ const ProblemInput = ({ onSubmit, isLoading }) => {
     }
   };
 
-  const handleClear = () => {
-    setProblemText('');
-  };
+  const handleClear = () => setProblemText('');
 
   const getCharCountColor = () => {
     if (charPercentage > 90) return 'text-red-400';
@@ -51,10 +48,9 @@ const ProblemInput = ({ onSubmit, isLoading }) => {
   };
 
   return (
-    <div className="relative w-full max-w-3xl mx-auto"
-    >
-
+    <div className="relative w-full max-w-3xl mx-auto">
       <form onSubmit={handleSubmit} className="relative">
+
         {/* Main Input Container */}
         <div className="relative">
           {/* Floating Placeholder */}
@@ -91,10 +87,7 @@ const ProblemInput = ({ onSubmit, isLoading }) => {
               transition-all duration-200
               focus:outline-none
               placeholder-transparent
-              ${isFocused 
-                ? 'border-purple-500' 
-                : 'border-gray-700'
-              }
+              ${isFocused ? 'border-purple-500' : 'border-gray-700'}
               ${isLoading ? 'opacity-50 cursor-not-allowed' : ''}
             `}
           />
@@ -107,70 +100,67 @@ const ProblemInput = ({ onSubmit, isLoading }) => {
           )}
         </div>
 
-        {/* Button Container */}
-<div className="flex gap-6 mt-10 justify-center">
+        {/* -------------------- PATCHED BUTTON AREA -------------------- */}
+        <div className="flex gap-4 mt-8 justify-center">
 
-  {/* Submit Button */}
-  <motion.button
-    type="submit"
-    disabled={!problemText.trim() || isLoading}
-    className={`
-      px-4 py-2
-      bg-gradient-to-r from-purple-600 to-purple-700
-      hover:from-purple-500 hover:to-purple-600
-      border border-purple-500
-      rounded-lg
-      text-white font-semibold text-base
-      transition-all duration-200
-      disabled:opacity-50 disabled:cursor-not-allowed
-    `}
-    whileHover={problemText.trim() && !isLoading ? { scale: 1.02 } : {}}
-    whileTap={problemText.trim() && !isLoading ? { scale: 0.98 } : {}}
-  >
-    <span className="flex items-center gap-2">
-      {isLoading ? (
-        <>
-          <motion.span
-            animate={{ rotate: 360 }}
-            transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+          {/* Submit Button (PATCH APPLIED) */}
+          <motion.button
+            type="submit"
+            disabled={!problemText.trim() || isLoading}
+            className={`
+              px-3 py-2
+              bg-gradient-to-r from-purple-600 to-purple-700
+              hover:from-purple-500 hover:to-purple-600
+              border border-purple-500
+              rounded-lg
+              text-white font-semibold text-sm md:text-base
+              transition-all duration-200
+              disabled:opacity-50 disabled:cursor-not-allowed
+            `}
+            whileHover={problemText.trim() && !isLoading ? { scale: 1.02 } : {}}
+            whileTap={problemText.trim() && !isLoading ? { scale: 0.98 } : {}}
           >
-            ⏳
-          </motion.span>
-          Generating Guidance...
-        </>
-      ) : (
-        <>
-          🚀 Generate Flowchart
-        </>
-      )}
-    </span>
-  </motion.button>
+            <span className="flex items-center gap-2">
+              {isLoading ? (
+                <>
+                  <motion.span
+                    animate={{ rotate: 360 }}
+                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                  >
+                    ⏳
+                  </motion.span>
+                  Generating Guidance...
+                </>
+              ) : (
+                <>🚀 Generate Flowchart</>
+              )}
+            </span>
+          </motion.button>
 
-  {/* Clear Button */}
-  {problemText && !isLoading && (
-    <motion.button
-      type="button"
-      onClick={handleClear}
-      className="
-        px-4 py-2
-        bg-gray-700 hover:bg-gray-600
-        border border-gray-600
-        rounded-lg
-        text-gray-200 font-semibold text-base
-        transition-all duration-200
-      "
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.9 }}
-      whileHover={{ scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-    >
-      <span className="flex items-center gap-2">
-        ✕ Clear
-      </span>
-    </motion.button>
-  )}
-</div>
+          {/* Clear Button (PATCH APPLIED) */}
+          {problemText && !isLoading && (
+            <motion.button
+              type="button"
+              onClick={handleClear}
+              className="
+                px-3 py-2
+                bg-gray-700 hover:bg-gray-600
+                border border-gray-600
+                rounded-lg
+                text-gray-200 font-semibold text-sm md:text-base
+                transition-all duration-200
+              "
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="flex items-center gap-2">✕ Clear</span>
+            </motion.button>
+          )}
+        </div>
+        {/* ------------------------------------------------------------ */}
 
       </form>
     </div>

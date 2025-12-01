@@ -63,7 +63,7 @@ const StepNode = ({
                 onClick={() => handleChoiceSelect(option)}
                 disabled={selectedChoice !== null}
                 className={`
-                  w-full p-5 rounded-xl text-left
+                  w-full px-4 py-3 rounded-xl text-left
                   transition-all duration-200
                   ${selectedChoice?.id === option.id
                     ? 'bg-purple-600/30 border-2 border-purple-500'

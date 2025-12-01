@@ -58,7 +58,7 @@ const ChoiceButton = ({
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       disabled={isDisabled}
-      className="relative w-full p-6 rounded-xl font-mono text-left overflow-hidden mystical-cursor"
+      className="relative w-full p-4 md:p-5 rounded-xl font-mono text-left overflow-hidden mystical-cursor"
       style={{
         background: config.bg,
         border: `2px solid ${config.border}`,
@@ -338,7 +338,7 @@ const ChoiceButton = ({
 
       {/* Choice Text */}
       <motion.div
-        className="relative z-10 text-base leading-relaxed pr-10"
+        className="relative z-10 text-sm md:text-base leading-relaxed pr-10"
         style={{
           color: config.textColor,
           textShadow: isHovered ? config.textShadowIntense : config.textShadow,
