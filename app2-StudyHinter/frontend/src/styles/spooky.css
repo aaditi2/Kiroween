@@ -1,0 +1,318 @@
+/* Spooky CSS Variables and Custom Styles */
+
+:root {
+  /* Color Palette */
+  --spooky-black: #0a0a0a;
+  --spooky-black-light: #1a1a1a;
+  --spooky-purple: #a855f7;
+  --spooky-purple-light: #c084fc;
+  --spooky-purple-dark: #7e22ce;
+  --spooky-green: #10b981;
+  --spooky-green-light: #34d399;
+  --spooky-red: #ef4444;
+  --spooky-red-light: #f87171;
+  --spooky-orange: #f59e0b;
+  --spooky-orange-light: #fbbf24;
+
+  /* Glow Effects */
+  --glow-purple: 0 0 20px rgba(168, 85, 247, 0.5);
+  --glow-purple-intense: 0 0 30px rgba(168, 85, 247, 0.8);
+  --glow-green: 0 0 20px rgba(16, 185, 129, 0.5);
+  --glow-green-intense: 0 0 30px rgba(16, 185, 129, 0.8);
+  --glow-red: 0 0 20px rgba(239, 68, 68, 0.5);
+  --glow-red-intense: 0 0 30px rgba(239, 68, 68, 0.8);
+
+  /* Shadow Effects */
+  --shadow-deep: 0 10px 40px rgba(0, 0, 0, 0.8);
+  --shadow-medium: 0 5px 20px rgba(0, 0, 0, 0.6);
+  --shadow-light: 0 2px 10px rgba(0, 0, 0, 0.4);
+}
+
+/* Global Animations */
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+}
+
+@keyframes fogMove {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes particleDrift {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(100px, -100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Utility Classes */
+
+.spooky-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.spooky-float-slow {
+  animation: floatSlow 4s ease-in-out infinite;
+}
+
+.spooky-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.spooky-fog-move {
+  animation: fogMove 20s linear infinite;
+}
+
+.spooky-particle-drift {
+  animation: particleDrift 15s linear infinite;
+}
+
+/* Glow Text Effects */
+
+.text-glow-purple {
+  text-shadow: var(--glow-purple);
+}
+
+.text-glow-purple-intense {
+  text-shadow: var(--glow-purple-intense);
+}
+
+.text-glow-green {
+  text-shadow: var(--glow-green);
+}
+
+.text-glow-green-intense {
+  text-shadow: var(--glow-green-intense);
+}
+
+.text-glow-red {
+  text-shadow: var(--glow-red);
+}
+
+.text-glow-red-intense {
+  text-shadow: var(--glow-red-intense);
+}
+
+/* Fog Effect Layers */
+
+.fog-layer {
+  position: absolute;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(168, 85, 247, 0.1) 25%,
+    rgba(168, 85, 247, 0.2) 50%,
+    rgba(168, 85, 247, 0.1) 75%,
+    transparent 100%
+  );
+  animation: fogMove 20s linear infinite;
+  pointer-events: none;
+}
+
+.fog-layer-green {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(16, 185, 129, 0.1) 25%,
+    rgba(16, 185, 129, 0.2) 50%,
+    rgba(16, 185, 129, 0.1) 75%,
+    transparent 100%
+  );
+  animation: fogMove 25s linear infinite;
+}
+
+/* Vignette Effect */
+
+.vignette {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.8);
+  z-index: 1;
+}
+
+/* Mystical Border Glow */
+
+.border-glow-purple {
+  border: 2px solid var(--spooky-purple);
+  box-shadow: var(--glow-purple);
+}
+
+.border-glow-purple:focus,
+.border-glow-purple:hover {
+  box-shadow: var(--glow-purple-intense);
+}
+
+.border-glow-green {
+  border: 2px solid var(--spooky-green);
+  box-shadow: var(--glow-green);
+}
+
+.border-glow-green:focus,
+.border-glow-green:hover {
+  box-shadow: var(--glow-green-intense);
+}
+
+.border-glow-red {
+  border: 2px solid var(--spooky-red);
+  box-shadow: var(--glow-red);
+}
+
+.border-glow-red:focus,
+.border-glow-red:hover {
+  box-shadow: var(--glow-red-intense);
+}
+
+/* Particle Effects */
+
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--spooky-purple-light);
+  box-shadow: var(--glow-purple);
+  animation: particleDrift 15s linear infinite;
+  pointer-events: none;
+}
+
+.particle-green {
+  background: var(--spooky-green-light);
+  box-shadow: var(--glow-green);
+}
+
+.particle-orange {
+  background: var(--spooky-orange-light);
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+}
+
+/* Backdrop Blur for Modals */
+
+.spooky-backdrop {
+  backdrop-filter: blur(8px);
+  background: rgba(10, 10, 10, 0.7);
+}
+
+/* Custom Scrollbar */
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--spooky-black);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--spooky-purple-dark);
+  border-radius: 5px;
+  box-shadow: var(--glow-purple);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--spooky-purple);
+  box-shadow: var(--glow-purple-intense);
+}
+
+/* Mystical Cursor */
+
+.mystical-cursor {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%23a855f7" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>'), auto;
+}
+
+/* Hover Levitation Effect */
+
+.hover-levitate {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-levitate:hover {
+  transform: translateY(-5px) scale(1.02);
+}
+
+/* Shimmer Effect for Loading */
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    rgba(168, 85, 247, 0.1) 0%,
+    rgba(168, 85, 247, 0.3) 50%,
+    rgba(168, 85, 247, 0.1) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite;
+}

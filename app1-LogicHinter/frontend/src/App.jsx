@@ -7,6 +7,7 @@ import useFlowchart from './hooks/useFlowchart';
 import './App.css';
 import './styles/spooky.css';
 
+
 function App() {
   const {
     flowchart,
@@ -25,17 +26,21 @@ function App() {
     clearError,
   } = useFlowchart();
 
+
   const [inputValue, setInputValue] = useState('');
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
+
   useEffect(() => {
     scrollToBottom();
   }, [flowchart, isLoading]);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -45,26 +50,29 @@ function App() {
     }
   };
 
+
   const handleReset = () => {
     resetFlowchart();
     setInputValue('');
     inputRef.current?.focus();
   };
 
+
   return (
-    <div className="relative h-screen overflow-hidden bg-black flex flex-col">
+    <div className="relative h-screen bg-black flex flex-col">
       {/* Spooky Background */}
       <SpookyBackground />
 
+
       {/* Fixed Header */}
-      <header className="relative z-20 border-b border-purple-900/30 bg-black/80 backdrop-blur-sm">
+      <header className="relative z-20 border-b border-purple-900/30 bg-black flex-shrink-0">
         <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-lg shadow-purple-500/20">
               <span className="text-xl">🧠</span>
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-green-400 bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-purple-400 to-green-400 bg-clip-text">
                 LogicHinter
               </h1>
               <p className="text-xs text-gray-500">AI that helps you learn how to code, not copy</p>
@@ -82,28 +90,24 @@ function App() {
         </div>
       </header>
 
+
       {/* Scrollable Content Area */}
       <main className="relative z-10 flex-1 overflow-y-auto">
-        <div className="max-w-5xl mx-auto px-4 py-8">
-          {/* Welcome State */}
+        <div className="max-w-5xl mx-auto px-4 py-6">
+          {/* Welcome State - Centered */}
           {!flowchart && !isLoading && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center justify-center min-h-[60vh] text-center"
+              className="flex flex-col items-center justify-center min-h-full text-center"
             >
-              <div className="mb-8">
-                <div className="w-20 h-20 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-800 flex items-center justify-center shadow-2xl shadow-purple-500/30">
-                  <span className="text-4xl">🧠</span>
-                </div>
-                <h2 className="text-3xl font-bold text-gray-200 mb-3">
-                  Welcome to LogicHinter
-                </h2>
+              {/* <div className="mb-8">
                 <p className="text-gray-400 text-lg max-w-2xl mx-auto">
-                  Your AI-powered coding mentor that guides you through problem-solving with interactive flowcharts.
+                  Hi, I'm your coding brainstorm buddy. I help you build logic — one decision at a time without providing code.
                   Ask a coding question below to get started.
                 </p>
-              </div>
+              </div> */}
+
 
               {/* Example prompts */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-3xl">
@@ -126,6 +130,7 @@ function App() {
             </motion.div>
           )}
 
+
           {/* Loading State */}
           {isLoading && (
             <motion.div
@@ -136,6 +141,7 @@ function App() {
               <LoadingSpinner message="Analyzing your problem..." />
             </motion.div>
           )}
+
 
           {/* Flowchart Response */}
           {flowchart && !isLoading && (
@@ -159,6 +165,7 @@ function App() {
               />
             </motion.div>
           )}
+
 
           {/* Error Display */}
           {error && !flowchart && (
@@ -185,72 +192,103 @@ function App() {
             </motion.div>
           )}
 
+
           <div ref={messagesEndRef} />
         </div>
       </main>
 
+
       {/* Fixed Input Bar at Bottom */}
-      <footer className="relative z-20 border-t border-purple-900/30 bg-black/90 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto px-4 py-4">
-          <form onSubmit={handleSubmit} className="relative">
-            <div className="relative flex items-center gap-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                placeholder="Ask a coding question..."
-                disabled={isLoading}
-                className="
-                  flex-1 px-5 py-4 
-                  bg-gray-900 
-                  border-2 border-gray-800 
-                  focus:border-purple-600
-                  rounded-xl
-                  text-gray-200 text-base
-                  placeholder-gray-500
-                  transition-all duration-200
-                  focus:outline-none
-                  disabled:opacity-50 disabled:cursor-not-allowed
-                "
-              />
-              <button
-                type="submit"
-                disabled={!inputValue.trim() || isLoading}
-                className="
-                  px-6 py-4
-                  bg-gradient-to-r from-purple-600 to-purple-700
-                  hover:from-purple-500 hover:to-purple-600
-                  disabled:from-gray-700 disabled:to-gray-800
-                  rounded-xl
-                  text-white font-semibold
-                  transition-all duration-200
-                  disabled:opacity-50 disabled:cursor-not-allowed
-                  shadow-lg shadow-purple-500/20
-                "
+<footer className="relative z-20 flex-shrink-0 py-6">
+  <div className="w-full flex justify-center">
+
+    <form onSubmit={handleSubmit} className="w-2/3 max-w-2xl px-4">
+      
+      
+      <div className="
+        flex items-center gap-3
+        shadow-[0_0_20px_rgba(128,0,255,0.25)]
+        focus-within:ring-0 focus-within:outline-none
+      ">
+
+        {/* Input */}
+        <input
+          ref={inputRef}
+          type="text"
+          value={inputValue}
+          onChange={(e) => setInputValue(e.target.value)}
+          placeholder="Send a message…"
+          disabled={isLoading}
+          className="
+                flex-1 bg-transparent text-gray-200 placeholder-gray-500
+                text-sm
+                border-none outline-none ring-0
+                focus:ring-0 focus:outline-none
+          "
+        />
+
+        {/* Mic + Send grouped on the right */}
+        <div className="flex items-center gap-2">
+
+          {/* Mic */}
+          <button
+            type="button"
+            className="p-2 text-gray-400 hover:text-gray-200 transition-colors rounded-lg hover:bg-gray-800"
+            title="Voice input"
+          >
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+            </svg>
+          </button>
+
+          {/* Send */}
+          <button
+            type="submit"
+            disabled={!inputValue.trim() || isLoading}
+            className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-orange-500/80 text-black shadow-lg shadow-orange-500/20 transition hover:bg-orange-500 focus:outline-none disabled:cursor-not-allowed disabled:opacity-60"
+            aria-label="Send question"
+          >
+            {isLoading ? (
+              <span className="text-sm">⏳</span>
+            ) : (
+              <svg
+                aria-hidden
+                focusable="false"
+                className="h-4 w-4"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                {isLoading ? (
-                  <motion.span
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                    className="inline-block"
-                  >
-                    ⏳
-                  </motion.span>
-                ) : (
-                  <span>→</span>
-                )}
-              </button>
-            </div>
-          </form>
-          
-          <p className="text-center text-xs text-gray-600 mt-3">
-            LogicHinter guides you through problem-solving. It won't give you the code, but it'll help you think through it.
-          </p>
+                <path
+                  d="M4.75 3.75L20.25 11.25L4.75 18.75L7.75 11.25L4.75 3.75Z"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinejoin="round"
+                />
+                <path
+                  d="M7.75 11.25H20.25"
+                  stroke="currentColor"
+                  strokeWidth="1.6"
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
+          </button>
         </div>
-      </footer>
+
+      </div>
+
+      <p className="mt-2 text-center text-[11px] tracking-[0.25em] text-gray-600">KIROWEEN HACKATHON</p>
+
+    </form>
+  </div>
+</footer>
+
+
+
     </div>
   );
 }
 
-export default App;
+
+export default App; 
