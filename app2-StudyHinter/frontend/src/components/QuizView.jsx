@@ -11,7 +11,7 @@ const QuizView = ({ quiz, currentStepIndex, answeredSteps, score, onAnswer, isCo
       {/* Progress Bar */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-3">
-          <h2 className="text-2xl font-bold text-orange-300" style={{ fontFamily: "'Creepster', cursive" }}>
+<h2 className="text-xs  text-white" style={{ fontFamily: "'Creepster', cursive", fontSize: '1.5rem', color: '#fb923c' }}>
             Spooky Quiz Journey
           </h2>
           <span className="text-gray-400 text-sm">

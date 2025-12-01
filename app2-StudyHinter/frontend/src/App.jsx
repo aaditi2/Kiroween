@@ -108,7 +108,7 @@ function App() {
               <span className="text-2xl">🎃</span>
             </div>
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text text-transparent">
+              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text">
                 StudyHinter
               </h1>
               <p className="text-xs text-gray-500">Learn with spooky fun quizzes!</p>
