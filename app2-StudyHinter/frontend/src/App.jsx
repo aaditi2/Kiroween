@@ -663,54 +663,6 @@ function App() {
   </div>
 </footer>
 
-      {/* Audio Control Button - Bottom Left Corner */}
-      <motion.button
-        onClick={() => {
-          console.log('Audio button clicked!');
-          toggleBackgroundMusic();
-        }}
-        className={`
-          fixed bottom-4 left-4 w-16 h-16 rounded-full
-          flex items-center justify-center cursor-pointer
-          transition-all duration-300 shadow-2xl
-          ${isMusicPlaying 
-            ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400' 
-            : 'bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600'
-          }
-          border-2 border-white/20
-        `}
-        style={{ zIndex: 9999 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        animate={isMusicPlaying ? {
-          boxShadow: [
-            '0 0 20px rgba(34, 197, 94, 0.4)',
-            '0 0 30px rgba(34, 197, 94, 0.6)',
-            '0 0 20px rgba(34, 197, 94, 0.4)'
-          ]
-        } : {}}
-        transition={isMusicPlaying ? {
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut"
-        } : {}}
-      >
-        <motion.span 
-          className="text-2xl"
-          animate={isMusicPlaying ? {
-            rotate: [0, 10, -10, 0],
-            scale: [1, 1.1, 1]
-          } : {}}
-          transition={isMusicPlaying ? {
-            duration: 1.5,
-            repeat: Infinity,
-            ease: "easeInOut"
-          } : {}}
-        >
-          {isMusicPlaying ? '🎵' : '🔇'}
-        </motion.span>
-      </motion.button>
-
     </div>
   );
 }
