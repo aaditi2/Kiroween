@@ -93,7 +93,7 @@ button {
   color: #a855f7;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 0 10px rgba(168, 85, 247, 0.3);
+  box-shadow: 0 0 10px rgba(135, 99, 170, 0.3);
 }
 
 button:hover {
@@ -108,7 +108,7 @@ button:active {
 
 button:focus,
 button:focus-visible {
-  outline: 2px solid #a855f7;
+  outline: 2px solid #755d8b;
   outline-offset: 2px;
 }
 
@@ -124,7 +124,7 @@ textarea {
   font-family: 'Space Mono', monospace;
   background-color: #1a1a1a;
   color: rgba(255, 255, 255, 0.9);
-  border: 2px solid #2d1b4e;
+  border: 2px solid #443b53;
   border-radius: 8px;
   padding: 0.75em;
   transition: all 0.3s ease;

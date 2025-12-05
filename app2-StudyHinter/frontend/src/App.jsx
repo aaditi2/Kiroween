@@ -15,6 +15,38 @@ const FALLBACK_QUESTIONS = [
   { emoji: '🌊', text: 'How do ocean waves work?', color: 'from-cyan-600 to-blue-600' },
 ];
 
+// Helper function to validate and sanitize emoji
+const validateEmoji = (emoji) => {
+  if (!emoji || typeof emoji !== 'string') return '❓';
+  
+  // Check for corrupted text (like Cyrillic characters that shouldn't be emojis)
+  const corruptedTextRegex = /[а-яё]/i; // Cyrillic characters
+  const hasCorruptedText = corruptedTextRegex.test(emoji);
+  
+  // If it contains corrupted text or is suspiciously long, return default
+  if (hasCorruptedText || emoji.length > 8) {
+    return '🔮'; // Default magical emoji
+  }
+  
+  return emoji;
+};
+
+// Helper function to validate example question data
+const validateExampleQuestion = (example, index) => {
+  const fallbackColors = [
+    'from-red-600 to-orange-600',
+    'from-green-600 to-teal-600', 
+    'from-blue-600 to-purple-600',
+    'from-cyan-600 to-blue-600'
+  ];
+  
+  return {
+    emoji: validateEmoji(example?.emoji),
+    text: example?.text || `Question ${index + 1}`,
+    color: example?.color || fallbackColors[index % fallbackColors.length]
+  };
+};
+
 function App() {
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState('below_grade_6'); // New state for difficulty
@@ -318,20 +350,23 @@ function App() {
                   ))
                 ) : (
                   // Dynamic questions
-                  exampleQuestions.map((example, i) => (
-                    <motion.button
-                      key={i}
-                      onClick={() => setTopic(example.text)}
-                      className={`p-3 text-left bg-gradient-to-br ${example.color} hover:scale-105 border-2 border-yellow-400/60 rounded-xl text-white transition-all shadow-lg relative overflow-hidden`}
-                      style={{ width: '400px' }}
-                      whileHover={{ y: -3 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <div className="absolute inset-0 bg-black/20"></div>
-                      <div className="relative flex items-center gap-3">
-                        <span className="text-3xl">{example.emoji}</span>
-                        <span className="text-lg font-bold">{example.text}</span>
-                      </div>
+                  exampleQuestions.map((example, i) => {
+                    // Only validate emoji if it seems corrupted, otherwise use original
+                    const safeEmoji = validateEmoji(example.emoji);
+                    return (
+                      <motion.button
+                        key={i}
+                        onClick={() => setTopic(example.text)}
+                        className={`p-3 text-left bg-gradient-to-br ${example.color} hover:scale-105 border-2 border-yellow-400/60 rounded-xl text-white transition-all shadow-lg relative overflow-hidden`}
+                        style={{ width: '400px' }}
+                        whileHover={{ y: -3 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        <div className="absolute inset-0 bg-black/20"></div>
+                        <div className="relative flex items-center gap-3">
+                          <span className="text-3xl">{safeEmoji}</span>
+                          <span className="text-lg font-bold">{example.text}</span>
+                        </div>
                       {/* Sparkle effect */}
                       <motion.div
                         className="absolute top-2 right-2 text-2xl"
@@ -348,7 +383,8 @@ function App() {
                         ✨
                       </motion.div>
                     </motion.button>
-                  ))
+                    );
+                  })
                 )}
               </div>
             </motion.div>
@@ -422,38 +458,34 @@ function App() {
            style={{ width: '500px' }}>
         
         <div className="flex items-center gap-3">
-          <motion.div className="text-4xl flex-shrink-0"
-            animate={{ rotate: [0, -10, 10, 0] }}
-            transition={{ duration: 3, repeat: Infinity }}>
-            🧙‍♀️
-          </motion.div>
+          
 
           {/* Input field container with difficulty buttons INSIDE */}
           <div className="flex-1 bg-black/40 rounded-xl p-3 space-y-2">
             {/* Difficulty buttons at top INSIDE the input bar */}
             <div className="flex items-center gap-1.5">
-              <span className="text-[15px] text-gray-400 font-bold">Difficulty:</span>
+              <span className="text-[13px] text-gray-400">Difficulty:</span>
               <button
                 type="button"
                 onClick={() => setDifficulty('below_grade_6')}
-                className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
+                className={`px-2 py-0.5 rounded text-[13px] font-bold transition-all ${
                   difficulty === 'below_grade_6'
                     ? 'bg-green-500 text-white'
                     : 'bg-transparent text-gray-500 hover:text-gray-300'
                 }`}
               >
-                🌟 &lt;6
+                Grade &lt; 6
               </button>
               <button
                 type="button"
                 onClick={() => setDifficulty('above_grade_6')}
-                className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
+                className={`px-2 py-0.5 rounded text-[13px] font-bold transition-all ${
                   difficulty === 'above_grade_6'
                     ? 'bg-purple-500 text-white'
                     : 'bg-transparent text-gray-500 hover:text-gray-300'
                 }`}
               >
-                🔥 6+
+                Grade 6+
               </button>
             </div>
 
@@ -474,13 +506,15 @@ function App() {
                 transition
                 
               "
+              style={{ fontSize: '15px', marginTop: '8px' }}
+              
             />
           </div>
         </div>
 
         <p
           className="text-center font-bold text-green-300"
-          style={{ fontSize: "12px", lineHeight: "12px", marginTop: "5px" }}
+          style={{ fontSize: "12px", lineHeight: "12px", marginTop: "10px" }}
         >
           KIROWEEN HACKATHON
         </p>
@@ -496,7 +530,7 @@ function App() {
           hover:from-orange-400 hover:via-red-400 hover:to-pink-400
           rounded-xl text-white font-black text-xl
         "
-        style={{ height: "40px", minWidth: "40px", marginLeft: "20px", marginTop: "23px" }}
+        style={{ height: "40px", minWidth: "40px", marginLeft: "20px", marginTop: "30px" }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
