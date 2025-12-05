@@ -246,33 +246,31 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
         </div>
 
       {/* Error Overlay - Compact popup like app1 */}
-      <AnimatePresence>
-        {showErrorOverlay && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.2 }}
-              className="w-full max-w-lg rounded-xl border border-orange-500/50 bg-gray-900/95 px-5 py-3 shadow-lg flex items-center gap-4"
-            >
-              {/* Text */}
-              <p className="flex-1 text-sm text-gray-200">
-                <span className="font-semibold text-orange-400">⚠️ Wrong option. </span>
-                {errorMessage}
-              </p>
+      {showErrorOverlay && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
+            className="w-full max-w-lg rounded-xl border border-orange-500/50 bg-gray-900/95 px-5 py-3 shadow-lg flex items-center gap-4"
+          >
+            {/* Text */}
+            <p className="flex-1 text-sm text-gray-200">
+              <span className="font-semibold text-orange-400">⚠️ Wrong option. </span>
+              {errorMessage}
+            </p>
 
-              {/* Button */}
-              <button
-                onClick={handleErrorOverlayClose}
-                className="rounded-md border border-orange-500/50 px-3 py-1.5 text-xs font-semibold text-orange-400 hover:bg-orange-500/10 transition"
-              >
-                Understood
-              </button>
-            </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
+            {/* Button */}
+            <button
+              onClick={handleErrorOverlayClose}
+              className="rounded-md border border-orange-500/50 px-3 py-1.5 text-xs font-semibold text-orange-400 hover:bg-orange-500/10 transition"
+            >
+              Understood
+            </button>
+          </motion.div>
+        </div>
+      )}
     </motion.div>
   );
 };
