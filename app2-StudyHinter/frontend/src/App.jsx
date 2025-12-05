@@ -272,19 +272,19 @@ function App() {
     }
   };
 
-  const handleAnswer = (stepId, optionId, isCorrect, wrongAttempts = 0) => {
+  const handleAnswer = (stepId, optionId, isCorrect, starsEarned = 0) => {
     if (answeredSteps.includes(stepId)) return;
 
     setAnsweredSteps([...answeredSteps, stepId]);
     
     if (isCorrect) {
-      // Calculate stars based on performance (0 wrong = 4 stars, 1 wrong = 3 stars, 2 wrong = 2 stars, 3 wrong = 1 star)
-      const stars = wrongAttempts === 0 ? 4 : wrongAttempts === 1 ? 3 : wrongAttempts === 2 ? 2 : 1;
+      // Use the stars earned directly from the QuestionCard component
+      const stars = starsEarned;
       
       // Update performance tracking
       setQuestionPerformance(prev => ({
         ...prev,
-        [stepId]: { wrongAttempts, stars }
+        [stepId]: { starsEarned: stars }
       }));
       
       // Add stars to total score

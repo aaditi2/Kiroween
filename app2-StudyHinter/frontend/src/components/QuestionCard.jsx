@@ -8,6 +8,9 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
   const [showErrorOverlay, setShowErrorOverlay] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
   const [canProgress, setCanProgress] = useState(false);
+  const [starsEarned, setStarsEarned] = useState(4);
+  const [wrongAttempts, setWrongAttempts] = useState(0);
+  const [finalStarsForAnimation, setFinalStarsForAnimation] = useState(4);
 
   // Reset state when step changes
   useEffect(() => {
@@ -17,6 +20,9 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
     setShowErrorOverlay(false);
     setErrorMessage('');
     setCanProgress(isAnswered);
+    setWrongAttempts(0);
+    setStarsEarned(4); // Reset to 4 stars for new question
+    setFinalStarsForAnimation(4); // Reset animation stars too
   }, [step.id, isAnswered]);
 
   // Success sound for correct answers
@@ -50,6 +56,8 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
     // Prevent clicking if already answered correctly
     if (isAnswered || canProgress) return;
 
+
+
     setSelectedOption(option);
     setShowFeedback(true);
 
@@ -58,16 +66,38 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
       playSuccessSound();
       setCanProgress(true);
       
-      // Call parent callback with wrong attempts count after a short delay
+      // Calculate and set final stars earned
+      const finalStarsEarned = Math.max(1, 4 - wrongAttempts);
+      setStarsEarned(finalStarsEarned);
+      setFinalStarsForAnimation(finalStarsEarned); // Preserve for animation
+      
+      console.log('🎯 CORRECT ANSWER! Wrong attempts:', wrongAttempts, 'Final stars:', finalStarsEarned);
+      console.log('🎯 Animation will show:', finalStarsEarned, 'stars');
+
       setTimeout(() => {
-        onAnswer(step.id, option.id, option.correct, wrongOptions.size);
+        onAnswer(step.id, option.id, option.correct, finalStarsEarned);
       }, 100);
     } else {
-      // Wrong answer - add to wrong options and show error overlay
-      setWrongOptions(prev => new Set([...prev, option.id]));
+      // Wrong answer - increment counter and update stars
+      const newWrongAttempts = wrongAttempts + 1;
+      setWrongAttempts(newWrongAttempts);
+      const newStarsEarned = Math.max(1, 4 - newWrongAttempts);
+      
+      console.log('❌ WRONG! Attempts now:', newWrongAttempts, 'Stars now:', newStarsEarned);
+      setStarsEarned(newStarsEarned);
+      setFinalStarsForAnimation(newStarsEarned); // Update animation stars too!
+      
+      setWrongOptions(prev => {
+        const newWrongOptions = new Set([...prev, option.id]);
+
+        return newWrongOptions;
+      });
+      
+
       setErrorMessage(option.reason || 'This is not the correct answer. Try again!');
       setShowErrorOverlay(true);
     }
+
   };
 
   const handleErrorOverlayClose = () => {
@@ -94,9 +124,16 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
         {step.description}
       </p>
 
+      {/* Temporary Debug Display */}
+      <div className="text-center mb-4 text-sm text-yellow-300">
+        Wrong: {wrongAttempts} | Stars: {starsEarned} | Animation: {finalStarsForAnimation}
+      </div>
+
+
+
       {/* Options Grid - A,B top row, C,D bottom row */}
       <div className="grid grid-cols-2 mx-auto" style={{ maxWidth: '500px', gap: '2rem' }}>
-          {step.options && step.options.sort((a, b) => a.id.localeCompare(b.id)).map((option) => {
+          {step.options && step.options.map((option) => {
             const isSelected = selectedOption?.id === option.id;
             const showCorrect = canProgress && option.correct;
             const showIncorrect = showFeedback && isSelected && !option.correct;
@@ -174,7 +211,7 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
                           transition={{ delay: 0.5, duration: 0.5 }}
                           className="flex gap-1 mt-1"
                         >
-                          {Array.from({ length: wrongOptions.size === 0 ? 4 : wrongOptions.size === 1 ? 3 : wrongOptions.size === 2 ? 2 : 1 }).map((_, i) => (
+                          {Array.from({ length: finalStarsForAnimation }).map((_, i) => (
                             <motion.span
                               key={i}
                               initial={{ scale: 0, rotate: 0 }}

@@ -258,21 +258,7 @@ def flowchart(request: FlowchartRequest) -> FlowchartResponse:
         return FlowchartResponse(steps=[], warning="Missing Gemini key")
 
     try:
-        # Add retry logic for rate limiting
-        import time
-        max_retries = 3
-        for attempt in range(max_retries):
-            try:
-                resp = gemini_complete(flowchart_prompt(request.problem, request.difficulty))
-                break
-            except Exception as e:
-                if "429" in str(e) and attempt < max_retries - 1:
-                    # Rate limited, wait and retry
-                    time.sleep(2 ** attempt)  # Exponential backoff: 1s, 2s, 4s
-                    continue
-                else:
-                    raise e
-        
+        resp = gemini_complete(flowchart_prompt(request.problem, request.difficulty))
         raw = clean_json(resp["candidates"][0]["content"]["parts"][0]["text"])
         steps = []
 
@@ -300,18 +286,11 @@ def flowchart(request: FlowchartRequest) -> FlowchartResponse:
                 )
             )
 
-        # Keep original A, B, C, D order - don't shuffle
-        # steps = [shuffle_options(s) for s in steps]
+        # Shuffle options to randomize correct answer position
+        steps = [shuffle_options(s) for s in steps]
         return FlowchartResponse(steps=steps)
 
     except Exception as e:
-        # If rate limited or API fails, return a fallback quiz
-        if "429" in str(e) or "rate" in str(e).lower():
-            fallback_steps = create_fallback_quiz(request.problem, request.difficulty)
-            return FlowchartResponse(
-                steps=fallback_steps, 
-                warning="API rate limited. Using fallback quiz. Consider upgrading to paid Gemini API for better reliability."
-            )
         return FlowchartResponse(steps=[], warning=str(e))
 
 

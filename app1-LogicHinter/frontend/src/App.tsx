@@ -158,7 +158,7 @@ export default function App() {
       <header className="fixed top-0 left-0 right-0 z-30 px-6 py-4 border-b border-mist/10 bg-black/40 backdrop-blur">
         <div className="max-w-6xl mx-auto">
           <h1 className="text-3xl font-bold text-mist">
-            <span className="text-pumpkin font-display">Logic</span>
+            🦇<span className="text-pumpkin font-display">Logic</span>
             Hinter
           </h1>
           <p className="text-sm text-mist/80">AI that helps you think "how to code", not copy.</p>
@@ -265,13 +265,15 @@ export default function App() {
                         {approachBadges[activeApproach].label}
                       </span>
                     </div>
-                    <div className="rounded-xl border border-pumpkin/30 bg-midnight/50 p-4 text-sm min-h-[160px] flex flex-col gap-3">
-                      {question ? (
-                        <p className="text-mist/90">{question}</p>
-                      ) : (
-                        <p className="text-mist/70">Loading the prompt…</p>
-                      )}
-                      <p className="text-[11px] text-mist/60">{approachBadges[activeApproach].helper}</p>
+                    <div className="rounded-xl border border-pumpkin/30 bg-midnight/50 p-4 text-sm min-h-[220px] max-h-[530px] flex flex-col gap-3">
+                      <div className="flex-1 overflow-y-auto pr-2">
+                        {question ? (
+                          <p className="text-mist/90">{question}</p>
+                        ) : (
+                          <p className="text-mist/70">Loading the prompt…</p>
+                        )}
+                      </div>
+                      <p className="text-[11px] text-mist/60 flex-shrink-0">{approachBadges[activeApproach].helper}</p>
                     </div>
                   </div>
 
@@ -293,7 +295,7 @@ export default function App() {
                       </div>
                     )}
                     <div className="rounded-xl border border-mist/10 bg-midnight/40 p-4 shadow-inner">
-                      <div className="space-y-3 lg:max-h-[calc(100vh-280px)] lg:overflow-y-auto lg:pr-2">
+                      <div className="space-y-3 max-h-[530px] overflow-y-auto pr-2">
                         {flowchartSteps.length === 0 ? (
                           <p className="text-xs text-mist/60 italic">Your tailored flowchart will appear here after you start.</p>
                         ) : (
@@ -513,7 +515,7 @@ export default function App() {
             </div> 
           </div>
           <p className="mt-2 text-center text-[11px] tracking-[0.25em] text-mist/60">
-      KIROWEEN HACKATHON
+      powered by KIRO
     </p>
         </div>
       </div>
