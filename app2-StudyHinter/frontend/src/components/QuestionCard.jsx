@@ -19,6 +19,33 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
     setCanProgress(isAnswered);
   }, [step.id, isAnswered]);
 
+  // Success sound for correct answers
+  const playSuccessSound = () => {
+    try {
+      const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      // Success sound - cheerful ascending notes (C-E-G-C major chord arpeggio)
+      oscillator.frequency.setValueAtTime(523, audioContext.currentTime); // C5
+      oscillator.frequency.setValueAtTime(659, audioContext.currentTime + 0.15); // E5
+      oscillator.frequency.setValueAtTime(784, audioContext.currentTime + 0.3); // G5
+      oscillator.frequency.setValueAtTime(1047, audioContext.currentTime + 0.45); // C6
+      
+      oscillator.type = 'sine';
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.6);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.6);
+    } catch (error) {
+      console.log('Audio not supported:', error);
+    }
+  };
+
   const handleOptionClick = (option) => {
     // Prevent clicking if already answered correctly
     if (isAnswered || canProgress) return;
@@ -27,7 +54,8 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
     setShowFeedback(true);
 
     if (option.correct) {
-      // Correct answer - show success animation and allow progression
+      // Correct answer - play success sound and show animation
+      playSuccessSound();
       setCanProgress(true);
       
       // Call parent callback after a short delay to allow animation to start
@@ -105,19 +133,6 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
                   ease: "easeInOut"
                 } : {}}
               >
-  {/* LARGE IMAGE — fills most of card */}
-  {option.image_url && (
-    <div className="rounded-lg overflow-hidden bg-black mb-3 w-full"
-         style={{ height: '180px' }}>
-      <img
-        src={option.image_url}
-        alt={option.label}
-        className="object-cover w-full h-full"
-        onError={(e) => { e.target.style.display = 'none'; }}
-      />
-    </div>
-  )}
-
                 {/* LARGE IMAGE — fills most of card */}
                 {option.image_url && (
                   <div className="rounded-lg overflow-hidden bg-black mb-3 w-full"
@@ -141,14 +156,14 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
                   `}>
                     {showCorrect ? (
                       <motion.span
-                        initial={{ scale: 0, rotate: -180 }}
-                        animate={{ scale: [0, 1, 1.5, 2], rotate: [0, 0, 180, 360] }}
+                        initial={{ scale: 0 }}
+                        animate={{ scale: [0, 1, 1.5, 2] }}
                         transition={{ 
                           duration: 1.5,
                           times: [0, 0.3, 0.6, 1],
                           ease: "easeInOut"
                         }}
-                        className="inline-block text-5xl"
+                        className="inline-block text-5xl text-green-500"
                       >
                         ✓
                       </motion.span>

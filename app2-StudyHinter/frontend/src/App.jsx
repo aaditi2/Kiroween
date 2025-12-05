@@ -50,6 +50,13 @@ const validateExampleQuestion = (example, index) => {
 function App() {
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState('below_grade_6'); // New state for difficulty
+  const [isMusicPlaying, setIsMusicPlaying] = useState(false);
+  const audioRef = useRef(null);
+  const audioContextRef = useRef(null);
+  const oscillatorRef = useRef(null);
+  const harmonyOscillatorRef = useRef(null);
+  const gainNodeRef = useRef(null);
+  const harmonyGainNodeRef = useRef(null);
   const [quiz, setQuiz] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -61,6 +68,122 @@ function App() {
   
   const inputRef = useRef(null);
   const messagesEndRef = useRef(null);
+
+  // Background music functions
+  const createChildrensMusic = () => {
+    try {
+      if (!audioContextRef.current) {
+        audioContextRef.current = new (window.AudioContext || window.webkitAudioContext)();
+      }
+
+      const audioContext = audioContextRef.current;
+      
+      // Create main melody oscillator and gain node
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      // Create harmony oscillator for richer sound
+      const harmonyOscillator = audioContext.createOscillator();
+      const harmonyGainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      harmonyOscillator.connect(harmonyGainNode);
+      harmonyGainNode.connect(audioContext.destination);
+      
+      // Set up a gentle, child-friendly melody
+      oscillator.type = 'sine';
+      harmonyOscillator.type = 'triangle'; // Warmer harmony sound
+      gainNode.gain.setValueAtTime(0.06, audioContext.currentTime); // Main melody volume
+      harmonyGainNode.gain.setValueAtTime(0.03, audioContext.currentTime); // Softer harmony
+      
+      // Soft educational melody - "Mary Had a Little Lamb" inspired with gentle variations
+      const notes = [
+        659.25, 587.33, 523.25, 587.33, // E D C D (Mary had a little lamb)
+        659.25, 659.25, 659.25, 0,     // E E E (rest)
+        587.33, 587.33, 587.33, 0,     // D D D (rest)
+        659.25, 783.99, 783.99, 0,     // E G G (rest)
+        659.25, 587.33, 523.25, 587.33, // E D C D (Its fleece was white as snow)
+        659.25, 659.25, 659.25, 659.25, // E E E E
+        587.33, 587.33, 659.25, 587.33, // D D E D
+        523.25, 0, 0, 0                 // C (rest rest rest)
+      ];
+      
+      let noteIndex = 0;
+      const playNote = () => {
+        if (oscillatorRef.current && isMusicPlaying) {
+          const currentNote = notes[noteIndex];
+          if (currentNote === 0) {
+            // Rest/silence
+            gainNode.gain.setValueAtTime(0, audioContext.currentTime);
+            harmonyGainNode.gain.setValueAtTime(0, audioContext.currentTime);
+          } else {
+            // Play main melody note
+            gainNode.gain.setValueAtTime(0.06, audioContext.currentTime);
+            oscillator.frequency.setValueAtTime(currentNote, audioContext.currentTime);
+            
+            // Play harmony note (perfect fifth below for rich sound)
+            const harmonyNote = currentNote * 0.667; // Perfect fifth interval
+            harmonyGainNode.gain.setValueAtTime(0.03, audioContext.currentTime);
+            harmonyOscillator.frequency.setValueAtTime(harmonyNote, audioContext.currentTime);
+          }
+          noteIndex = (noteIndex + 1) % notes.length;
+          setTimeout(playNote, 700); // Gentle, relaxed tempo
+        }
+      };
+      
+      oscillator.start();
+      harmonyOscillator.start();
+      oscillatorRef.current = oscillator;
+      harmonyOscillatorRef.current = harmonyOscillator;
+      gainNodeRef.current = gainNode;
+      harmonyGainNodeRef.current = harmonyGainNode;
+      
+      playNote();
+      
+    } catch (error) {
+      console.log('Audio not supported:', error);
+    }
+  };
+
+  const stopBackgroundMusic = () => {
+    try {
+      if (oscillatorRef.current) {
+        oscillatorRef.current.stop();
+        oscillatorRef.current = null;
+      }
+      if (harmonyOscillatorRef.current) {
+        harmonyOscillatorRef.current.stop();
+        harmonyOscillatorRef.current = null;
+      }
+      if (gainNodeRef.current) {
+        gainNodeRef.current = null;
+      }
+      if (harmonyGainNodeRef.current) {
+        harmonyGainNodeRef.current = null;
+      }
+    } catch (error) {
+      console.log('Error stopping audio:', error);
+    }
+  };
+
+  const toggleBackgroundMusic = () => {
+    if (isMusicPlaying) {
+      stopBackgroundMusic();
+      setIsMusicPlaying(false);
+    } else {
+      createChildrensMusic();
+      setIsMusicPlaying(true);
+    }
+  };
+
+  // Cleanup audio on component unmount
+  useEffect(() => {
+    return () => {
+      stopBackgroundMusic();
+    };
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -539,6 +662,54 @@ function App() {
     </form>
   </div>
 </footer>
+
+      {/* Audio Control Button - Bottom Left Corner */}
+      <motion.button
+        onClick={() => {
+          console.log('Audio button clicked!');
+          toggleBackgroundMusic();
+        }}
+        className={`
+          fixed bottom-4 left-4 w-16 h-16 rounded-full
+          flex items-center justify-center cursor-pointer
+          transition-all duration-300 shadow-2xl
+          ${isMusicPlaying 
+            ? 'bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-400 hover:to-emerald-400' 
+            : 'bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-500 hover:to-gray-600'
+          }
+          border-2 border-white/20
+        `}
+        style={{ zIndex: 9999 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        animate={isMusicPlaying ? {
+          boxShadow: [
+            '0 0 20px rgba(34, 197, 94, 0.4)',
+            '0 0 30px rgba(34, 197, 94, 0.6)',
+            '0 0 20px rgba(34, 197, 94, 0.4)'
+          ]
+        } : {}}
+        transition={isMusicPlaying ? {
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        } : {}}
+      >
+        <motion.span 
+          className="text-2xl"
+          animate={isMusicPlaying ? {
+            rotate: [0, 10, -10, 0],
+            scale: [1, 1.1, 1]
+          } : {}}
+          transition={isMusicPlaying ? {
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          } : {}}
+        >
+          {isMusicPlaying ? '🎵' : '🔇'}
+        </motion.span>
+      </motion.button>
 
     </div>
   );
