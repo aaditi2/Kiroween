@@ -245,44 +245,32 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
           })}
         </div>
 
-      {/* Error Overlay - Centered on page with z-index 40 */}
+      {/* Error Overlay - Compact popup like app1 */}
       <AnimatePresence>
         {showErrorOverlay && (
-          <motion.div
-            initial={{ opacity: 0, y: 20, scale: 0.9 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -20, scale: 0.9 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 flex items-center justify-center px-4"
-            style={{ zIndex: 40 }}
-          >
-            {/* Backdrop */}
-            <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={handleErrorOverlayClose} />
-            
-            {/* Error Card */}
-            <div className="relative bg-gradient-to-r from-red-900/95 to-red-800/95 backdrop-blur-md border-2 border-red-500 rounded-2xl p-6 shadow-2xl max-w-2xl w-full">
-              <div className="flex items-start gap-4">
-                <motion.div
-                  animate={{ rotate: [0, -10, 10, 0] }}
-                  transition={{ duration: 0.5, repeat: 2 }}
-                  className="text-4xl flex-shrink-0"
-                >
-                  ❌
-                </motion.div>
-                <div className="flex-1">
-                  <h3 className="text-red-200 font-bold text-xl mb-2">Oops! Not quite right</h3>
-                  <p className="text-red-100 text-lg leading-relaxed">{errorMessage}</p>
-                  <p className="text-red-300 text-sm mt-3 font-semibold">Try another option! 🤔</p>
-                </div>
-                <button
-                  onClick={handleErrorOverlayClose}
-                  className="text-red-300 hover:text-red-100 text-3xl font-bold transition-colors leading-none"
-                >
-                  ×
-                </button>
-              </div>
-            </div>
-          </motion.div>
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.2 }}
+              className="w-full max-w-lg rounded-xl border border-orange-500/50 bg-gray-900/95 px-5 py-3 shadow-lg flex items-center gap-4"
+            >
+              {/* Text */}
+              <p className="flex-1 text-sm text-gray-200">
+                <span className="font-semibold text-orange-400">⚠️ Wrong option. </span>
+                {errorMessage}
+              </p>
+
+              {/* Button */}
+              <button
+                onClick={handleErrorOverlayClose}
+                className="rounded-md border border-orange-500/50 px-3 py-1.5 text-xs font-semibold text-orange-400 hover:bg-orange-500/10 transition"
+              >
+                Understood
+              </button>
+            </motion.div>
+          </div>
         )}
       </AnimatePresence>
     </motion.div>
