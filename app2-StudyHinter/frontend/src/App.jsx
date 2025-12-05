@@ -63,6 +63,7 @@ function App() {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [answeredSteps, setAnsweredSteps] = useState([]);
+  const [questionPerformance, setQuestionPerformance] = useState({}); // Track wrong attempts per question
   const [exampleQuestions, setExampleQuestions] = useState(FALLBACK_QUESTIONS);
   const [loadingExamples, setLoadingExamples] = useState(true);
   
@@ -239,6 +240,7 @@ function App() {
       setCurrentStepIndex(0);
       setScore(0);
       setAnsweredSteps([]);
+      setQuestionPerformance({});
 
       try {
         const response = await fetch('http://localhost:8000/api/flowchart', {
@@ -270,13 +272,23 @@ function App() {
     }
   };
 
-  const handleAnswer = (stepId, optionId, isCorrect) => {
+  const handleAnswer = (stepId, optionId, isCorrect, wrongAttempts = 0) => {
     if (answeredSteps.includes(stepId)) return;
 
     setAnsweredSteps([...answeredSteps, stepId]);
     
     if (isCorrect) {
-      setScore(score + 1);
+      // Calculate stars based on performance (0 wrong = 4 stars, 1 wrong = 3 stars, 2 wrong = 2 stars, 3 wrong = 1 star)
+      const stars = wrongAttempts === 0 ? 4 : wrongAttempts === 1 ? 3 : wrongAttempts === 2 ? 2 : 1;
+      
+      // Update performance tracking
+      setQuestionPerformance(prev => ({
+        ...prev,
+        [stepId]: { wrongAttempts, stars }
+      }));
+      
+      // Add stars to total score
+      setScore(prevScore => prevScore + stars);
     }
 
     // Move to next question after a delay
@@ -294,6 +306,7 @@ function App() {
     setCurrentStepIndex(0);
     setScore(0);
     setAnsweredSteps([]);
+    setQuestionPerformance({});
     inputRef.current?.focus();
   };
 
@@ -367,7 +380,7 @@ function App() {
                 }}
               >
                 <span className="text-yellow-200 font-black text-lg">
-                  ⭐ {score}/{quiz.steps.length} Stars!
+                  ⭐ {score}/{quiz.steps.length * 4} Stars!
                 </span>
               </motion.div>
               <button

@@ -58,9 +58,9 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
       playSuccessSound();
       setCanProgress(true);
       
-      // Call parent callback after a short delay to allow animation to start
+      // Call parent callback with wrong attempts count after a short delay
       setTimeout(() => {
-        onAnswer(step.id, option.id, option.correct);
+        onAnswer(step.id, option.id, option.correct, wrongOptions.size);
       }, 100);
     } else {
       // Wrong answer - add to wrong options and show error overlay
@@ -155,18 +155,38 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
                       : 'text-purple-400'}
                   `}>
                     {showCorrect ? (
-                      <motion.span
-                        initial={{ scale: 0 }}
-                        animate={{ scale: [0, 1, 1.5, 2] }}
-                        transition={{ 
-                          duration: 1.5,
-                          times: [0, 0.3, 0.6, 1],
-                          ease: "easeInOut"
-                        }}
-                        className="inline-block text-5xl text-green-500"
-                      >
-                        ✓
-                      </motion.span>
+                      <div className="flex flex-col items-center">
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: [0, 1, 1.5, 2] }}
+                          transition={{ 
+                            duration: 1.5,
+                            times: [0, 0.3, 0.6, 1],
+                            ease: "easeInOut"
+                          }}
+                          className="inline-block text-5xl text-green-500"
+                        >
+                          ✓
+                        </motion.span>
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.5, duration: 0.5 }}
+                          className="flex gap-1 mt-1"
+                        >
+                          {Array.from({ length: wrongOptions.size === 0 ? 4 : wrongOptions.size === 1 ? 3 : wrongOptions.size === 2 ? 2 : 1 }).map((_, i) => (
+                            <motion.span
+                              key={i}
+                              initial={{ scale: 0, rotate: 0 }}
+                              animate={{ scale: 1, rotate: 360 }}
+                              transition={{ delay: 0.7 + i * 0.1, duration: 0.3 }}
+                              className="text-yellow-400 text-lg"
+                            >
+                              ⭐
+                            </motion.span>
+                          ))}
+                        </motion.div>
+                      </div>
                     ) : (showIncorrect || wasWrong) ? '✗' : `${option.id}.`}
                   </span>
 

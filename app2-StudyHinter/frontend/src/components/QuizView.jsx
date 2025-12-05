@@ -5,6 +5,8 @@ const QuizView = ({ quiz, currentStepIndex, answeredSteps, score, onAnswer, isCo
   const currentStep = quiz?.steps?.[currentStepIndex];
   const totalSteps = quiz?.steps?.length || 0;
   const progress = (answeredSteps.length / totalSteps) * 100;
+  const maxPossibleStars = totalSteps * 4;
+  const starPercentage = (score / maxPossibleStars) * 100;
 
   return (
     <div className="relative w-full mt-8">
@@ -140,33 +142,63 @@ const QuizView = ({ quiz, currentStepIndex, answeredSteps, score, onAnswer, isCo
               }}
             >
               <span className="text-7xl">
-                {score === totalSteps ? '🏆' : score >= totalSteps * 0.7 ? '🎉' : '👻'}
+                {starPercentage >= 90 ? '🏆' : starPercentage >= 70 ? '🎉' : starPercentage >= 50 ? '👍' : '📚'}
               </span>
             </motion.div>
 
             <h2 className="text-5xl font-bold text-orange-300 mb-4" style={{ fontFamily: "'Creepster', cursive" }}>
-              {score === totalSteps ? 'Perfect Score!' : score >= totalSteps * 0.7 ? 'Great Job!' : 'Good Try!'}
+              {starPercentage >= 90 ? 'Perfect Wizard!' : starPercentage >= 70 ? 'Great Job!' : starPercentage >= 50 ? 'Good Effort!' : 'Keep Learning!'}
             </h2>
 
             <p className="text-2xl text-gray-300 mb-6">
-              You got <span className="text-orange-400 font-bold">{score}</span> out of{' '}
-              <span className="text-purple-400 font-bold">{totalSteps}</span> correct!
+              You earned <span className="text-yellow-400 font-bold">{score}</span> out of{' '}
+              <span className="text-purple-400 font-bold">{maxPossibleStars}</span> stars!
             </p>
 
+            {/* Star Rating Display */}
+            <div className="flex justify-center mb-6">
+              {Array.from({ length: 5 }).map((_, i) => {
+                const starThreshold = ((i + 1) / 5) * maxPossibleStars;
+                const isEarned = score >= starThreshold;
+                return (
+                  <motion.span
+                    key={i}
+                    className={`text-6xl ${isEarned ? 'text-yellow-400' : 'text-gray-600'}`}
+                    animate={isEarned ? {
+                      scale: [1, 1.2, 1],
+                      rotate: [0, 10, -10, 0]
+                    } : {}}
+                    transition={{
+                      duration: 0.5,
+                      delay: i * 0.1,
+                      repeat: isEarned ? 2 : 0
+                    }}
+                  >
+                    ⭐
+                  </motion.span>
+                );
+              })}
+            </div>
+
             <div className="flex flex-wrap justify-center gap-4 max-w-2xl mx-auto">
-              {score === totalSteps && (
+              {starPercentage >= 90 && (
                 <div className="px-6 py-3 bg-yellow-500/20 border-2 border-yellow-500 rounded-xl">
-                  <span className="text-yellow-300 text-lg">🌟 You're a Quiz Master! 🌟</span>
+                  <span className="text-yellow-300 text-lg">🏆 Perfect Performance! Almost no mistakes! 🏆</span>
                 </div>
               )}
-              {score >= totalSteps * 0.7 && score < totalSteps && (
+              {starPercentage >= 70 && starPercentage < 90 && (
                 <div className="px-6 py-3 bg-green-500/20 border-2 border-green-500 rounded-xl">
-                  <span className="text-green-300 text-lg">✨ Almost Perfect! ✨</span>
+                  <span className="text-green-300 text-lg">✨ Excellent! Just a few wrong tries! ✨</span>
                 </div>
               )}
-              {score < totalSteps * 0.7 && (
+              {starPercentage >= 50 && starPercentage < 70 && (
+                <div className="px-6 py-3 bg-blue-500/20 border-2 border-blue-500 rounded-xl">
+                  <span className="text-blue-300 text-lg">👍 Good job! Room for improvement! 👍</span>
+                </div>
+              )}
+              {starPercentage < 50 && (
                 <div className="px-6 py-3 bg-purple-500/20 border-2 border-purple-500 rounded-xl">
-                  <span className="text-purple-300 text-lg">💪 Keep Learning! 💪</span>
+                  <span className="text-purple-300 text-lg">💪 Keep practicing! You'll get better! 💪</span>
                 </div>
               )}
             </div>
