@@ -136,4 +136,14 @@ npm run dev
 
 ---
 
+## 📜 License
+
+This project is licensed under the **MIT License** - an OSI-approved open source license.
+
+See the [LICENSE](LICENSE) file for full details.
+
+**TL;DR:** Free to use, modify, and distribute. No strings attached. 👻
+
+---
+
 **Built with 💀 for Kiroween Hackathon**
