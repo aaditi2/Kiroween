@@ -7,63 +7,97 @@ const QuizView = ({ quiz, currentStepIndex, answeredSteps, score, onAnswer, isCo
   const progress = (answeredSteps.length / totalSteps) * 100;
 
   return (
-    <div className="relative w-full">
-      {/* Progress Bar */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-3">
-<h2 className="text-xs  text-white" style={{ fontFamily: "'Creepster', cursive", fontSize: '1.5rem', color: '#fb923c' }}>
-            Spooky Quiz Journey
-          </h2>
-          <span className="text-gray-400 text-sm">
+    <div className="relative w-full mt-8">
+      {/* Spooky Progress Section */}
+      <div className="mb-12 text-center">
+        {/* Question Counter - Centered */}
+        <motion.div
+          className="inline-block mb-6"
+          animate={{
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: 'easeInOut',
+          }}
+        >
+          <span className="text-white text-xl mt-10 font-bold uppercase tracking-wider">
             Question {Math.min(currentStepIndex + 1, totalSteps)} of {totalSteps}
           </span>
-        </div>
+        </motion.div>
         
-        <div className="relative h-3 bg-gray-900 rounded-full overflow-hidden border-2 border-orange-800/30">
-          <motion.div
-            className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-orange-500 to-purple-500"
-            initial={{ width: '0%' }}
-            animate={{ width: `${progress}%` }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-          />
+        {/* Spooky Progress Bar with Ghosts */}
+        <div className="relative mx-auto" style={{ maxWidth: '600px', padding: '0 1rem' }}>
+          <div 
+            className="relative rounded-full overflow-hidden" 
+            style={{ 
+              height: '12px',
+              backgroundColor: 'rgba(0, 0, 0, 0.3)',
+              border: 'none',
+              boxShadow: 'inset 0 2px 4px rgba(0,0,0,0.3)'
+            }}
+          >
+            <motion.div
+              className="absolute rounded-full"
+              style={{
+                top: 0,
+                bottom: 0,
+                left: 0,
+                background: 'linear-gradient(90deg, #f97316, #ef4444, #a855f7)',
+                boxShadow: '0 0 20px rgba(249, 115, 22, 0.6)',
+              }}
+              initial={{ width: '0%' }}
+              animate={{ width: `${progress}%` }}
+              transition={{ duration: 0.5, ease: 'easeOut' }}
+            />
+            
+            {/* Animated glow */}
+            <motion.div
+              className="absolute rounded-full"
+              style={{
+                top: 0,
+                bottom: 0,
+                left: 0,
+                background: 'linear-gradient(90deg, rgba(249, 115, 22, 0.8), rgba(239, 68, 68, 0.8), rgba(168, 85, 247, 0.8))',
+                width: `${progress}%`,
+                filter: 'blur(8px)',
+              }}
+              animate={{
+                opacity: [0.4, 1, 0.4],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            />
+          </div>
           
-          {/* Glowing effect */}
-          <motion.div
-            className="absolute inset-y-0 left-0 rounded-full"
-            style={{
-              background: 'linear-gradient(90deg, rgba(249, 115, 22, 0.4), rgba(168, 85, 247, 0.4))',
-              width: `${progress}%`,
-            }}
-            animate={{
-              opacity: [0.5, 1, 0.5],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut',
-            }}
-          />
+          {/* Floating ghost at progress end */}
+          {progress > 5 && (
+            <motion.div
+              className="absolute text-3xl"
+              style={{ 
+                left: `${Math.min(progress, 98)}%`,
+                top: '50%',
+                transform: 'translate(-50%, -50%)',
+              }}
+              animate={{
+                y: [-3, 3, -3],
+                rotate: [-5, 5, -5],
+              }}
+              transition={{
+                duration: 1.5,
+                repeat: Infinity,
+                ease: 'easeInOut',
+              }}
+            >
+              👻
+            </motion.div>
+          )}
         </div>
       </div>
-
-      {/* Completed Steps Badges */}
-      {answeredSteps.length > 0 && (
-        <div className="mb-6">
-          <div className="flex flex-wrap gap-2">
-            {answeredSteps.map((stepId, i) => (
-              <motion.div
-                key={stepId}
-                className="w-10 h-10 rounded-full bg-green-500/20 border-2 border-green-500 flex items-center justify-center"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: i * 0.1, type: 'spring' }}
-              >
-                <span className="text-green-400 text-lg">✓</span>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      )}
 
       {/* Current Question */}
       <AnimatePresence mode="wait">

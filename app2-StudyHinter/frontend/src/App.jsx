@@ -5,15 +5,27 @@ import LoadingSpinner from './components/LoadingSpinner';
 import QuizView from './components/QuizView';
 import './App.css';
 import './styles/spooky.css';
+import './styles/index.css';
+
+// Fallback questions in case API fails
+const FALLBACK_QUESTIONS = [
+  { emoji: '🌋', text: 'How do volcanoes erupt?', color: 'from-red-600 to-orange-600' },
+  { emoji: '🦕', text: 'What happened to dinosaurs?', color: 'from-green-600 to-teal-600' },
+  { emoji: '🌙', text: 'Why does the moon glow?', color: 'from-blue-600 to-purple-600' },
+  { emoji: '🌊', text: 'How do ocean waves work?', color: 'from-cyan-600 to-blue-600' },
+];
 
 function App() {
   const [topic, setTopic] = useState('');
+  const [difficulty, setDifficulty] = useState('below_grade_6'); // New state for difficulty
   const [quiz, setQuiz] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [score, setScore] = useState(0);
   const [answeredSteps, setAnsweredSteps] = useState([]);
+  const [exampleQuestions, setExampleQuestions] = useState(FALLBACK_QUESTIONS);
+  const [loadingExamples, setLoadingExamples] = useState(true);
   
   const inputRef = useRef(null);
   const messagesEndRef = useRef(null);
@@ -25,6 +37,43 @@ function App() {
   useEffect(() => {
     scrollToBottom();
   }, [quiz, isLoading]);
+
+  // Fetch example questions on component mount
+  useEffect(() => {
+    const fetchExampleQuestions = async () => {
+      setLoadingExamples(true);
+      try {
+        // Create abort controller for timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000);
+
+        const response = await fetch('http://localhost:8000/api/example-questions', {
+          signal: controller.signal,
+        });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch example questions');
+        }
+
+        const data = await response.json();
+        
+        if (data.questions && data.questions.length > 0) {
+          setExampleQuestions(data.questions);
+        } else {
+          setExampleQuestions(FALLBACK_QUESTIONS);
+        }
+      } catch (err) {
+        console.error('Failed to fetch example questions:', err);
+        setExampleQuestions(FALLBACK_QUESTIONS);
+      } finally {
+        setLoadingExamples(false);
+      }
+    };
+
+    fetchExampleQuestions();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,7 +89,7 @@ function App() {
         const response = await fetch('http://localhost:8000/api/flowchart', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ problem: topic.trim() }),
+          body: JSON.stringify({ problem: topic.trim(), difficulty: difficulty }),
         });
 
         if (!response.ok) {
@@ -96,37 +145,81 @@ function App() {
   const isQuizComplete = quiz && currentStepIndex >= quiz.steps.length - 1 && answeredSteps.length === quiz.steps.length;
 
   return (
-    <div className="relative h-screen overflow-hidden bg-black flex flex-col">
+    <div className="h-screen flex flex-col relative overflow-hidden" style={{ background: 'linear-gradient(180deg, #2d1b4e 0%, #4a2b6e 50%, #2d1b4e 100%)' }}>
       {/* Spooky Background */}
       <SpookyBackground />
 
-      {/* Fixed Header */}
-      <header className="relative z-20 border-b border-orange-900/30 bg-black/80 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-orange-600 to-purple-700 flex items-center justify-center shadow-lg shadow-orange-500/30 transform rotate-3">
-              <span className="text-2xl">🎃</span>
-            </div>
+      {/* Floating Ghosts Animation */}
+      <div className="fixed inset-0 pointer-events-none z-5">
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={`ghost-${i}`}
+            className="absolute text-6xl opacity-20"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+            }}
+            animate={{
+              y: [0, -30, 0],
+              x: [0, Math.random() * 20 - 10, 0],
+              opacity: [0.1, 0.3, 0.1],
+            }}
+            transition={{
+              duration: 4 + Math.random() * 2,
+              repeat: Infinity,
+              delay: i * 0.5,
+            }}
+          >
+            👻
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Sticky Header - Haunted House Style */}
+      <header className="sticky top-0 bg-gradient-to-r from-purple-900/90 to-indigo-900/90 backdrop-blur-md shadow-2xl" style={{ zIndex: 100 }}>
+        <div className="max-w-6xl mx-auto flex items-center justify-between border-b-4 border-orange-500/50" style={{ paddingLeft: '2rem', paddingRight: '1.5rem', paddingTop: '0.5rem', paddingBottom: '0.5rem' }}>
+          <div className="flex items-center gap-4">
+            
             <div>
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-orange-400 to-purple-400 bg-clip-text">
-                StudyHinter
+              <h1 className="text-3xl font-black tracking-wider" style={{ 
+                fontFamily: "'Creepster', cursive",
+                background: 'linear-gradient(90deg, #ff8c42, #ffd60a, #06ffa5)',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                textShadow: '0 0 30px rgba(255, 140, 66, 0.5)',
+                margin: '0',
+                lineHeight: '1',
+
+              }}>
+                🧙🏻‍♀️QuizCraft
               </h1>
-              <p className="text-xs text-gray-500">Learn with spooky fun quizzes!</p>
+              <p className="text-sm font-bold" style={{ color: '#06ffa5', marginTop: '0.25rem', marginBottom: '0' }}>
+                🦇 Learn GK with mistake-based learning. 🕷️
+              </p>
             </div>
           </div>
           
           {quiz && (
             <div className="flex items-center gap-4">
-              <div className="px-4 py-2 rounded-lg bg-purple-900/30 border border-purple-700/50">
-                <span className="text-purple-300 font-semibold">
-                  🌟 Score: {score}/{quiz.steps.length}
+              <motion.div 
+                className="px-6 py-3 rounded-2xl bg-gradient-to-r from-yellow-500/30 to-orange-500/30 border-3 border-yellow-400/60 shadow-lg"
+                animate={{
+                  boxShadow: ['0 0 20px rgba(255, 214, 10, 0.3)', '0 0 40px rgba(255, 214, 10, 0.6)', '0 0 20px rgba(255, 214, 10, 0.3)'],
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                }}
+              >
+                <span className="text-yellow-200 font-black text-lg">
+                  ⭐ {score}/{quiz.steps.length} Stars!
                 </span>
-              </div>
+              </motion.div>
               <button
                 onClick={handleReset}
-                className="px-4 py-2 text-sm bg-gray-800 hover:bg-gray-700 border border-gray-700 rounded-lg text-gray-300 transition-colors"
+                className="px-6 py-3 text-base font-bold bg-gradient-to-r from-red-600 to-purple-600 hover:from-red-500 hover:to-purple-500 border-2 border-orange-400 rounded-2xl text-white transition-all transform hover:scale-105 shadow-lg"
               >
-                New Quiz
+                🎃 New Quest
               </button>
             </div>
           )}
@@ -134,21 +227,21 @@ function App() {
       </header>
 
       {/* Scrollable Content Area */}
-      <main className="relative z-10 flex-1 overflow-y-auto">
-        <div className="max-w-5xl mx-auto px-4 py-8">
-          {/* Welcome State */}
+      <main className="flex-1 overflow-y-auto relative" style={{ zIndex: 1 }}>
+        <div className="max-w-4xl mx-auto px-6 py-8">
+          {/* Welcome State - Haunted House */}
           {!quiz && !isLoading && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="flex flex-col items-center justify-center min-h-[60vh] text-center"
             >
-              <div className="mb-8">
+              <div className="mb-10">
+                {/* Haunted House with Floating Animation */}
                 <motion.div 
-                  className="w-32 h-32 mx-auto mb-6 rounded-3xl bg-gradient-to-br from-orange-600 to-purple-700 flex items-center justify-center shadow-2xl shadow-orange-500/40"
+                  className="relative w-48 h-48 mx-auto mb-8"
                   animate={{
-                    rotate: [0, 5, -5, 0],
-                    scale: [1, 1.05, 1],
+                    y: [0, -15, 0],
                   }}
                   transition={{
                     duration: 4,
@@ -156,34 +249,107 @@ function App() {
                     ease: 'easeInOut',
                   }}
                 >
-                  <span className="text-6xl">🎃</span>
+
+                  {/* Floating bats */}
+                  {[...Array(3)].map((_, i) => (
+                    <motion.span
+                      key={i}
+                      className="absolute text-4xl"
+                      style={{
+                        left: `${30 + i * 20}%`,
+                        top: `${20 + i * 15}%`,
+                      }}
+                      animate={{
+                        x: [0, 20, 0],
+                        y: [0, -20, 0],
+                        rotate: [0, 10, 0],
+                      }}
+                      transition={{
+                        duration: 2 + i,
+                        repeat: Infinity,
+                        delay: i * 0.3,
+                      }}
+                    >
+                      🦇
+                    </motion.span>
+                  ))}
                 </motion.div>
-                <h2 className="text-4xl font-bold text-orange-300 mb-4" style={{ fontFamily: "'Creepster', cursive" }}>
-                  Welcome to StudyHinter!
+                
+                <h2 className="text-5xl font-black mb-6" style={{ 
+                  fontFamily: "'Creepster', cursive",
+                  background: 'linear-gradient(90deg, #ff8c42, #ffd60a, #06ffa5, #9d4edd)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  textShadow: '0 0 40px rgba(255, 140, 66, 0.6)',
+                }}>
+                  Welcome to the Haunted Study Hall!
                 </h2>
-                <p className="text-gray-300 text-xl max-w-2xl mx-auto leading-relaxed">
-                  Enter any topic below and I'll create a fun, spooky quiz with pictures to help you learn! 
-                  Perfect for curious minds who love a little mystery! 👻
+                <p className="text-white text-2xl max-w-3xl mx-auto leading-relaxed font-bold mb-4" style={{ textShadow: '0 2px 10px rgba(0,0,0,0.5)' }}>
+                  {/* 🕯️ Enter any topic and I'll conjure up a magical quiz with pictures! 🕯️ */}
+                  🔮 Suggested General Knowledge questions for today!✨
                 </p>
               </div>
 
-              {/* Example topics */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full max-w-3xl mb-8">
-                {[
-                  { emoji: '🌍', text: 'How do volcanoes work?' },
-                  { emoji: '🦕', text: 'What happened to the dinosaurs?' },
-                  { emoji: '🌙', text: 'Why does the moon change shape?' },
-                  { emoji: '🌊', text: 'How do ocean waves form?' },
-                ].map((example, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setTopic(example.text)}
-                    className="p-4 text-left bg-gray-900/50 hover:bg-gray-800/50 border-2 border-orange-800/30 hover:border-orange-600/50 rounded-xl text-gray-300 transition-all transform hover:scale-105"
-                  >
-                    <span className="text-2xl mr-3">{example.emoji}</span>
-                    <span className="text-base">{example.text}</span>
-                  </button>
-                ))}
+              {/* Example topics - Spooky Cards */}
+              <div className="flex flex-col items-center w-full mb-8" style={{ gap: '10px' }}>
+                {loadingExamples ? (
+                  // Loading skeleton
+                  [...Array(4)].map((_, i) => (
+                    <motion.div
+                      key={`skeleton-${i}`}
+                      className="p-3 bg-gradient-to-br from-purple-600/30 to-indigo-600/30 border-2 border-yellow-400/30 rounded-xl shadow-lg relative overflow-hidden"
+                      style={{ width: '400px' }}
+                      animate={{
+                        opacity: [0.5, 0.8, 0.5],
+                      }}
+                      transition={{
+                        duration: 1.5,
+                        repeat: Infinity,
+                        delay: i * 0.1,
+                      }}
+                    >
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-white/20 rounded-lg"></div>
+                        <div className="flex-1">
+                          <div className="h-4 bg-white/20 rounded w-3/4"></div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ))
+                ) : (
+                  // Dynamic questions
+                  exampleQuestions.map((example, i) => (
+                    <motion.button
+                      key={i}
+                      onClick={() => setTopic(example.text)}
+                      className={`p-3 text-left bg-gradient-to-br ${example.color} hover:scale-105 border-2 border-yellow-400/60 rounded-xl text-white transition-all shadow-lg relative overflow-hidden`}
+                      style={{ width: '400px' }}
+                      whileHover={{ y: -3 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      <div className="absolute inset-0 bg-black/20"></div>
+                      <div className="relative flex items-center gap-3">
+                        <span className="text-3xl">{example.emoji}</span>
+                        <span className="text-lg font-bold">{example.text}</span>
+                      </div>
+                      {/* Sparkle effect */}
+                      <motion.div
+                        className="absolute top-2 right-2 text-2xl"
+                        animate={{
+                          rotate: [0, 360],
+                          scale: [1, 1.2, 1],
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          delay: i * 0.2,
+                        }}
+                      >
+                        ✨
+                      </motion.div>
+                    </motion.button>
+                  ))
+                )}
               </div>
             </motion.div>
           )}
@@ -246,66 +412,100 @@ function App() {
         </div>
       </main>
 
-      {/* Fixed Input Bar at Bottom */}
-      <footer className="relative z-20 border-t border-orange-900/30 bg-black/90 backdrop-blur-sm">
-        <div className="max-w-5xl mx-auto px-4 py-4">
-          <form onSubmit={handleSubmit} className="relative">
-            <div className="relative flex items-center gap-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={topic}
-                onChange={(e) => setTopic(e.target.value)}
-                placeholder="What do you want to learn about? 🎃"
-                disabled={isLoading}
-                className="
-                  flex-1 px-6 py-4 
-                  bg-gray-900 
-                  border-2 border-orange-800/30 
-                  focus:border-orange-600
-                  rounded-xl
-                  text-gray-200 text-lg
-                  placeholder-gray-500
-                  transition-all duration-200
-                  focus:outline-none
-                  disabled:opacity-50 disabled:cursor-not-allowed
-                "
-              />
+      {/* Sticky Input Bar at Bottom - ChatGPT Style */}
+      <footer className="sticky bottom-0" style={{ zIndex: 100 }}>
+  <div className="w-full flex justify-center pb-6">
+    <form onSubmit={handleSubmit} className="flex items-start gap-8">
+      {/* Main prompt bar container */}
+      <div className="bg-gradient-to-r from-purple-900/95 to-indigo-900/95 
+                      backdrop-blur-md rounded-3xl shadow-2xl p-5"
+           style={{ width: '500px' }}>
+        
+        <div className="flex items-center gap-3">
+          <motion.div className="text-4xl flex-shrink-0"
+            animate={{ rotate: [0, -10, 10, 0] }}
+            transition={{ duration: 3, repeat: Infinity }}>
+            🧙‍♀️
+          </motion.div>
+
+          {/* Input field container with difficulty buttons INSIDE */}
+          <div className="flex-1 bg-black/40 rounded-xl p-3 space-y-2">
+            {/* Difficulty buttons at top INSIDE the input bar */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-[15px] text-gray-400 font-bold">Difficulty:</span>
               <button
-                type="submit"
-                disabled={!topic.trim() || isLoading}
-                className="
-                  px-8 py-4
-                  bg-gradient-to-r from-orange-600 to-purple-600
-                  hover:from-orange-500 hover:to-purple-500
-                  disabled:from-gray-700 disabled:to-gray-800
-                  rounded-xl
-                  text-white font-bold text-lg
-                  transition-all duration-200
-                  disabled:opacity-50 disabled:cursor-not-allowed
-                  shadow-lg shadow-orange-500/20
-                "
+                type="button"
+                onClick={() => setDifficulty('below_grade_6')}
+                className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
+                  difficulty === 'below_grade_6'
+                    ? 'bg-green-500 text-white'
+                    : 'bg-transparent text-gray-500 hover:text-gray-300'
+                }`}
               >
-                {isLoading ? (
-                  <motion.span
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
-                    className="inline-block text-2xl"
-                  >
-                    🎃
-                  </motion.span>
-                ) : (
-                  <span className="text-2xl">→</span>
-                )}
+                🌟 &lt;6
+              </button>
+              <button
+                type="button"
+                onClick={() => setDifficulty('above_grade_6')}
+                className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
+                  difficulty === 'above_grade_6'
+                    ? 'bg-purple-500 text-white'
+                    : 'bg-transparent text-gray-500 hover:text-gray-300'
+                }`}
+              >
+                🔥 6+
               </button>
             </div>
-          </form>
-          
-          <p className="text-center text-xs text-gray-600 mt-3">
-            StudyHinter creates fun quizzes with real pictures to help you learn! 🌟
-          </p>
+
+            {/* Input field below */}
+            <input
+              ref={inputRef}
+              type="text"
+              value={topic}
+              onChange={(e) => setTopic(e.target.value)}
+              placeholder="What magical topic shall we explore? 🧙‍♀️✨"
+              className="
+                w-full
+                bg-transparent
+                text-white font-bold
+                placeholder-purple-300
+                px-2 py-2
+                focus:outline-bold
+                transition
+                
+              "
+            />
+          </div>
         </div>
-      </footer>
+
+        <p
+          className="text-center font-bold text-green-300"
+          style={{ fontSize: "12px", lineHeight: "12px", marginTop: "5px" }}
+        >
+          KIROWEEN HACKATHON
+        </p>
+      </div>
+
+      {/* Submit button - now outside and beside the prompt bar */}
+      <motion.button
+        type="submit"
+        disabled={!topic.trim() || isLoading}
+        className="
+          flex items-center justify-center gap-2
+          bg-gradient-to-r from-orange-500 via-red-500 to-pink-500
+          hover:from-orange-400 hover:via-red-400 hover:to-pink-400
+          rounded-xl text-white font-black text-xl
+        "
+        style={{ height: "40px", minWidth: "40px", marginLeft: "20px", marginTop: "23px" }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <span className="text-2xl">↳</span>
+      </motion.button>
+    </form>
+  </div>
+</footer>
+
     </div>
   );
 }
