@@ -8,7 +8,7 @@ A haunting showcase of three distinct challenges brought to life through code, A
 
 **The Challenge:** Stitch together a chimera of technologies into one app. Bring together seemingly incompatible elements to build something unexpectedly powerful.
 
-**Our Creation:** We've merged Python FastAPI backends with React/TypeScript frontends, integrated OpenAI's GPT models with custom logic engines, and combined real-time AI processing with polished UI/UX. The result? Two distinct applications that seamlessly blend:
+**My Creation:** We've merged Python FastAPI backends with React/TypeScript frontends, integrated OpenAI's GPT models with custom logic engines, and combined real-time AI processing with polished UI/UX. The result? Two distinct applications that seamlessly blend:
 - 🐍 Python + FastAPI (Backend)
 - ⚛️ React + TypeScript/JSX (Frontend)
 - 🤖 OpenAI GPT-4 (AI Intelligence)
