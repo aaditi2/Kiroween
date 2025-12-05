@@ -3,6 +3,14 @@
   command = "npm run build"
   publish = "dist"
 
+# Forward API calls to Railway backend
+[[redirects]]
+  from = "/api/*"
+  to = "https://kiroween-production-3af6.up.railway.app/api/:splat"
+  status = 200
+  force = true
+
+# Standard SPA redirect (keep this LAST)
 [[redirects]]
   from = "/*"
   to = "/index.html"
