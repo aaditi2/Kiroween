@@ -30,7 +30,11 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
     setWrongAttempts(0);
     setStarsEarned(4); // Reset to 4 stars for new question
     setFinalStarsForAnimation(4); // Reset animation stars too
-  }, [step.id, isAnswered]);
+  }, [step.id]);
+
+  useEffect(() => {
+    setCanProgress(isAnswered);
+  }, [isAnswered]);
 
   // Success sound for correct answers
   const playSuccessSound = () => {
@@ -131,11 +135,7 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
         {step.description}
       </p>
 
-      {/* Temporary Debug Display */}
-      <div className="text-center mb-4 text-sm text-yellow-300">
-        Wrong: {wrongAttempts} | Stars: {starsEarned} | Animation: {finalStarsForAnimation}
-      </div>
-
+     
 
 
       {/* Options Grid - A,B top row, C,D bottom row */}
