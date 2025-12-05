@@ -12,6 +12,13 @@ const QuestionCard = ({ step, onAnswer, isAnswered = false }) => {
   const [wrongAttempts, setWrongAttempts] = useState(0);
   const [finalStarsForAnimation, setFinalStarsForAnimation] = useState(4);
 
+  const calculateStarsFromWrongAttempts = (attempts) => {
+    if (attempts === 0) return 4; // Correct on first try
+    if (attempts === 1) return 3; // One wrong attempt
+    if (attempts === 2) return 2; // Two wrong attempts
+    return 1; // Three or more wrong attempts
+  };
+  
   // Reset state when step changes
   useEffect(() => {
     setSelectedOption(null);
