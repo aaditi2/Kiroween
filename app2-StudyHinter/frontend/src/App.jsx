@@ -203,7 +203,7 @@ function App() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 5000);
 
-        const response = await fetch('http://localhost:8000/api/example-questions', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/example-questions`, {
           signal: controller.signal,
         });
 
@@ -243,7 +243,7 @@ function App() {
       setQuestionPerformance({});
 
       try {
-        const response = await fetch('http://localhost:8000/api/flowchart', {
+        const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:8000'}/api/flowchart`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ problem: topic.trim(), difficulty: difficulty }),
