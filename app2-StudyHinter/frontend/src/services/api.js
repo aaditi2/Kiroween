@@ -1,5 +1,5 @@
 /**
- * API Service for LogicHinter Frontend
+ * API Service for StudyHinter Frontend
  * Handles communication with the backend API
  */
 
@@ -118,15 +118,15 @@ class ApiService {
   }
 
   /**
-   * Generate a flowchart from a problem description
-   * @param {string} problem - The coding problem text
-   * @param {string} approach - The approach type: 'naive', 'optimized', or 'both'
+   * Generate a quiz flowchart from a topic
+   * @param {string} problem - The topic/question text
+   * @param {string} difficulty - The difficulty level: 'below_grade_6' or 'above_grade_6'
    * @returns {Promise<Object>} The flowchart data
    */
-  async generateFlowchart(problem, approach = 'both') {
+  async generateFlowchart(problem, difficulty = 'below_grade_6') {
     if (!problem || typeof problem !== 'string' || problem.trim().length === 0) {
       throw new ApiError(
-        'Problem text is required and cannot be empty',
+        'Topic text is required and cannot be empty',
         400,
         null
       );
@@ -140,13 +140,13 @@ class ApiService {
         },
         body: JSON.stringify({
           problem: problem.trim(),
-          approach: approach || 'both',
+          difficulty: difficulty || 'below_grade_6',
         }),
       });
 
       // Handle HTTP errors
       if (!response.ok) {
-        let errorMessage = 'Failed to generate flowchart';
+        let errorMessage = 'Failed to generate quiz';
         let errorData = null;
 
         try {
@@ -173,7 +173,7 @@ class ApiService {
         this._validateFlowchart(data);
       } catch (validationError) {
         throw new ApiError(
-          `Invalid flowchart structure: ${validationError.message}`,
+          `Invalid quiz structure: ${validationError.message}`,
           500,
           data
         );
@@ -196,8 +196,36 @@ class ApiService {
 
       // Generic error
       throw new ApiError(
-        error.message || 'An unexpected error occurred while generating the flowchart',
+        error.message || 'An unexpected error occurred while generating the quiz',
         500,
+        null
+      );
+    }
+  }
+
+  /**
+   * Get example questions for the welcome screen
+   * @returns {Promise<Object>} Example questions
+   */
+  async getExampleQuestions() {
+    try {
+      const response = await this._fetchWithTimeout(`${this.baseURL}/api/example-questions`, {
+        method: 'GET',
+      });
+
+      if (!response.ok) {
+        throw new ApiError('Failed to fetch example questions', response.status, null);
+      }
+
+      return await response.json();
+    } catch (error) {
+      if (error instanceof ApiError) {
+        throw error;
+      }
+
+      throw new ApiError(
+        'Unable to fetch example questions',
+        0,
         null
       );
     }
@@ -209,7 +237,7 @@ class ApiService {
    */
   async healthCheck() {
     try {
-      const response = await this._fetchWithTimeout(`${this.baseURL}/api/health`, {
+      const response = await this._fetchWithTimeout(`${this.baseURL}/`, {
         method: 'GET',
       });
 
