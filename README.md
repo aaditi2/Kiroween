@@ -1,6 +1,69 @@
 # 🎃 Kiroween Hackathon Submission
+---
+## 💀 Skeleton Crew: Versatile Foundation
 
-A haunting showcase of three distinct challenges brought to life through code, AI, and spooky design.
+### 🏗️ Our Reusable Skeleton Framework
+
+The `Skeleton` directory contains our production-ready template featuring:
+
+**Backend Foundation:**
+- **Abstract router template** with 3 customizable methods for AI behavior
+- **Base configuration system** that apps extend with their own settings  
+- **Gemini AI client** with error handling and response parsing
+- **Common Pydantic models** (FlowStep, FlowOption, etc.) shared across apps
+- **Utility functions** for JSON parsing, validation, and data sanitization
+- **FastAPI app factory** with CORS middleware and health checks
+
+**Frontend Foundation:**
+- **Base API service classes** with timeout handling and error management
+- **React hooks** for common API interactions and state management
+- **TypeScript interfaces** matching backend models
+- **TailwindCSS configuration** with extensible themes
+- **Deployment configurations** ready for Railway + Netlify
+
+📖 **[Complete Documentation & Usage Examples →](Skeleton/README.md)**
+
+---
+
+### 🎯 Two Production Applications Built From One Skeleton
+
+#### 🧠 [Logic Hinter](https://app1kiro.netlify.app/) - The Brainstorm Coding Buddy that doesn't give code
+
+**The Problem:** Stuck on a LeetCode problem? Don't want to see the solution directly and ruin your learning? YouTube tutorials show you the code, AI chat gives you the answer, but nobody allows YOU to think through a problem?
+
+**Our Solution:** Logic Hinter is the world's first AI that **NEVER GIVES CODE** - only guides your reasoning. A patient mentor who helps you think step-by-step, not copy.
+
+**Why It's Revolutionary:**
+- 💡 **Pure Logic Training** - Builds algorithmic code thinking, not copy-paste habits.
+- 🔗 **Smart Learning Links** - Provides curated educational resources but never direct code solutions.
+- � **Earn Your Resources** - Get helpful learning resources only AFTER making the right reasoning choice.
+- 🎯 **Two Learning Modes** - "Naive" (explore basics) and "Optimized" (efficiency-focused)
+
+**Perfect For:** Developers who want to actually understand algorithms, not just memorize solutions.
+
+#### 📚 [Study Hinter](https://app2kiro.netlify.app/) - Interactive General Knowledge for Kids
+
+An intelligent General Knowledge companion for children that generates quiz questions and provides adaptive "mistake-based" learning guidance. Transform any topic into an engaging learning experience.
+
+**Key Features:**
+- 🧠 **AI-Generated Questions** - Custom quizzes for any topic
+- 📊 **Adaptive Difficulty** - Below Grade 6 vs Above Grade 6 modes
+- ⭐ **Star-Based Scoring** - Mistake-based learning (4→3→2→1 stars per wrong option selection)
+- 🖼️ **Visual Learning** - Images for each answer option via Unsplash integration for children.
+- 🎃 **Spooky Theme** - Engaging Halloween-inspired design
+
+---
+
+### 🌟 Skeleton - Endless Possibilities
+
+Our foundation of "option-based" learning can power diverse AI applications:
+
+- 🎮 **Interactive Adventure Games** - Choose-your-own-adventure with consequences
+- 🏥 **Medical Training Platforms** - Diagnostic reasoning for healthcare professionals  
+- 🌍 **Language Learning Apps** - Conversation scenarios and cultural context
+- 💼 **Professional Development** - Workplace skills and decision-making frameworks
+- 🧮 **Educational Tools** - Math, science, and academic subject tutoring
+- 🎯 **Skill Assessment** - Interactive evaluations and personalized feedback
 
 ---
 
@@ -8,45 +71,12 @@ A haunting showcase of three distinct challenges brought to life through code, A
 
 **The Challenge:** Stitch together a chimera of technologies into one app. Bring together seemingly incompatible elements to build something unexpectedly powerful.
 
-**Our Creation:** We've merged Python FastAPI backends with React/TypeScript frontends, integrated OpenAI's GPT models with custom logic engines, and combined real-time AI processing with polished UI/UX. The result? Two distinct applications that seamlessly blend:
+**Our Creation:** We've merged Python FastAPI backends with React/TypeScript frontends, integrated Gemini's models with custom logic engines, and combined real-time AI processing with polished UI/UX. The result? Two distinct applications that seamlessly blend:
 - 🐍 Python + FastAPI (Backend)
 - ⚛️ React + TypeScript/JSX (Frontend)
-- 🤖 OpenAI GPT-4 (AI Intelligence)
+- 🤖 Gemini (AI Intelligence)
 - 🎨 TailwindCSS + Custom Animations (Spooky UI)
 - ☁️ Railway + Netlify (Cloud Deployment)
-
----
-
-## 💀 Skeleton Crew: Versatile Foundation
-
-**The Challenge:** Build a skeleton code template lean enough to be clear but flexible enough to support various use cases. Show its versatility with two distinct applications from your foundation.
-
-**Our Foundation:** The `Skeleton` directory contains our reusable template featuring:
-- Modular FastAPI architecture with routers and core utilities
-- Environment-based configuration
-- OpenAI integration patterns
-- Encryption utilities for secure API key management
-- Clean separation of concerns
-
-**Two Distinct Applications Built From One Skeleton:**
-
-### 🧠 [Logic Hinter](https://app1kiro.netlify.app/)
-An AI-powered logic puzzle assistant that helps you solve complex reasoning challenges. Get hints, validate solutions, and sharpen your logical thinking skills with a spooky twist.
-
-**Features:**
-- Interactive logic puzzle solver
-- Progressive hint system
-- Real-time AI feedback
-- Haunting purple-themed interface
-
-### 📚 [Study Hinter](https://app2kiro.netlify.app/)
-An intelligent study companion that generates personalized quiz questions and provides adaptive learning guidance. Transform any topic into an engaging learning experience.
-
-**Features:**
-- AI-generated quiz questions
-- Adaptive difficulty levels
-- Instant feedback and explanations
-- Eerie green-themed design
 
 ---
 
@@ -75,31 +105,10 @@ Experience the apps yourself:
 
 ---
 
-## 🛠️ Technical Architecture
-
-```
-├── Skeleton/              # Reusable template foundation
-│   ├── app/
-│   │   ├── core/         # Shared utilities
-│   │   ├── routers/      # API route templates
-│   │   └── main.py       # FastAPI application
-│   └── scripts/          # Utility scripts
-│
-├── app1-LogicHinter/     # Logic puzzle application
-│   ├── backend/          # Python FastAPI
-│   └── frontend/         # React + TypeScript
-│
-└── app2-StudyHinter/     # Study quiz application
-    ├── backend/          # Python FastAPI
-    └── frontend/         # React + JSX
-```
-
----
-
 ## 🎯 What Makes This Special
 
 1. **True Versatility:** One skeleton, two completely different applications with distinct purposes
-2. **AI-Powered:** Leveraging GPT-4 for intelligent, context-aware responses
+2. **AI-Powered:** Leveraging Gemini for intelligent, context-aware responses
 3. **Production-Ready:** Deployed and accessible with proper CI/CD pipelines
 4. **Design Excellence:** Spooky aesthetics that enhance rather than distract
 5. **Clean Code:** Modular, maintainable, and well-documented
@@ -146,4 +155,4 @@ See the [LICENSE](LICENSE) file for full details.
 
 ---
 
-**Built with 💀 for Kiroween Hackathon**
+**Built with 💀Kiro for Kiroween Hackathon**
