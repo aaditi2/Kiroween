@@ -27,7 +27,7 @@ The `Skeleton` directory contains our production-ready template featuring:
 
 ### 🎯 Two Production Applications Built From One Skeleton
 
-#### 🧠 [Logic Hinter](https://app1kiro.netlify.app/) - The Brainstorm Coding Buddy that doesn't give code
+#### 🧠 [Logic Hinter](https://app1kiro.netlify.app/) - ✨World's first ever✨ coding AI that NEVER GIVES CODE 
 
 **The Problem:** Stuck on a LeetCode problem? Don't want to see the solution directly and ruin your learning? YouTube tutorials show you the code, AI chat gives you the answer, but nobody allows YOU to think through a problem?
 
